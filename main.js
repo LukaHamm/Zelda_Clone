@@ -1,4 +1,6 @@
-import { Player } from "./player.js";
+import { Entity } from "./Entity.js";
+import { SpriteAnimation } from "./SpriteAnimation.js";
+import { Player } from "./Player.js";
 import { InputHandler } from "./InputHandler.js";
 
 
