@@ -1,3 +1,5 @@
+import { Idle } from "./Control.js";
+import { Walk } from "./Control.js";
 class State {
     constructor(){
     }
@@ -8,10 +10,19 @@ class State {
 
     changeState(input, player){
         if (input.keys.length == 0){
-            return new Idle(player);
+            if(this instanceof Idle != true){
+                return new Idle(player);
+            }else {
+                return this;
+            }
         }else  if(input.keys.indexOf("ArrowLeft") > -1 
         || input.keys.indexOf("ArrowRight") > -1 || input.keys.indexOf("ArrowDown") >-1 || input.keys.indexOf("ArrowUp") >-1){
-            return new Walk(player);
+            if(this instanceof Walk !=true){
+                return new Walk(player);
+            }else {
+                return this;
+            }
+            
         }
     }
 
