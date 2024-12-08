@@ -1,4 +1,5 @@
 class Entity {
+    static EnityID;
     constructor(x,y, heigt,width){
         this.x=x;
         this.y=y;

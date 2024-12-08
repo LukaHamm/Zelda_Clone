@@ -6,22 +6,19 @@
 
 
 class Chunk {
-    constructor(entityArray,background,x,y){
+    constructor(entityArray,x,y,tiles){
         this.entityArray = entityArray;
-        this.background = background;
+        this.tiles = tiles;
         this.x=x;
         this.y=y;
+        this.speedmodifier=0.6;
     }
 
 
     loadChunk(ctx){
         this.loadBackground(ctx)
-        this.entityArray.array.forEach(row => {
-           row.forEach(entitiy =>{
-            entitiy.x = row.indexOf(element);
-            entitiy.y = array.indexOf(row);
-            entitiy.draw(ctx)
-           })
+        this.entityArray.array.forEach(entity => {
+            entity.draw(ctx);
         });
 
         
@@ -29,8 +26,36 @@ class Chunk {
 
 
     loadBackground(ctx){
-
+        this.tiles.forEach(tile => {
+            tile.draw(ctx);
+        })
     }
+
+
+    update(input){
+        this.speed = 10*this.speedmodifier;
+        if(input.keys.indexOf("ArrowRight") > -1){
+             this.x = this.x - this.speed;
+             this.updateEntities(-this.speed,0);
+        } else if (input.keys.indexOf("ArrowLeft") > -1){
+            this.x = this.x + this.speed;
+            this.updateEntities(this.speed,0);
+        }else if (input.keys.indexOf("ArrowDown") > -1){
+            this.y = this.y - this.speed;
+            this.updateEntities(0,-this.speed);
+        }else if(input.keys.indexOf("ArrowUp") >-1){
+            this.y = this.y + this.speed;
+            this.updateEntities(0,this.speed);
+        }
+    }
+
+    updateEntities(dx,dy){
+        this.entityArray.forEach(entitiy => {
+            entitiy.x += dx;
+            entitiy.y += dy;
+        })
+    }
+        
 
     checkCollisionWithEntity(player){
         this.entityArray.array.forEach(row => {
