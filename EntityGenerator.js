@@ -1,9 +1,9 @@
-import TReeEntity, { TreeEntity } from "./TreeEntity.js"
+import { TreeEntity } from "./TreeEntity.js"
 class EntityGenerator{
 
     static generateEntity (entityID,x,y,width,height){
         switch(entityID){
-            case 101:
+            case "101":
                 return new TreeEntity(x,y,width,height);
             default:
                 return null;

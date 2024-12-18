@@ -8,7 +8,7 @@ class Entity {
     }
 
     update (){
-
+        
     }
 
     draw(){

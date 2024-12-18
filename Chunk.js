@@ -73,3 +73,5 @@ class Chunk {
 
 
 }
+
+export {Chunk}
