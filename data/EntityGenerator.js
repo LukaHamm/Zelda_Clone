@@ -1,4 +1,4 @@
-import { TreeEntity } from "./TreeEntity.js"
+import { TreeEntity } from "../model/TreeEntity.js"
 class EntityGenerator{
 
     static generateEntity (entityID,x,y,width,height){

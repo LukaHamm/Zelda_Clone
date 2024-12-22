@@ -1,5 +1,3 @@
-import { Entity } from "./Entity.js";
-
 class Background{
     constructor(image, speedmodifier,width,height){
         //super(0,0,height,width)

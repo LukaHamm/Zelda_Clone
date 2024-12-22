@@ -1,5 +1,5 @@
 import { Entity } from "./Entity.js";
-import { SpriteAnimation } from "./SpriteAnimation.js";
+import { SpriteAnimation } from "../animation/SpriteAnimation.js";
 
 class Player extends Entity{
     constructor(gameWidth, gameHeight){

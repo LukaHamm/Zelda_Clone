@@ -6,13 +6,25 @@
 
 
 class Chunk {
-    constructor(entityArray,x,y,tiles){
+    static maxTileCount=200;
+    static maxTileCountWidth = 20;
+    static maxTileCountHeight=10;
+
+    static copyChunk(chunk){
+        return new Chunk(chunk.entityArray,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation)
+    }
+
+    constructor(entityArray,x,y,tiles,tileVariation){
         this.entityArray = entityArray;
         this.tiles = tiles;
         this.x=x;
         this.y=y;
         this.speedmodifier=0.6;
+        this.tileVariation=tileVariation;
+        this.offsetx = 0;
+        this.offsetY = 0;
     }
+    
 
 
     loadChunk(ctx){
@@ -24,6 +36,14 @@ class Chunk {
         
     }
 
+
+    setOffsetX(offsetx){
+        this.offsetx = offsetx;
+    }
+
+    setOffsetY(offsetY){
+        this.offsetY = offsetY;
+    }
 
     loadBackground(ctx){
         this.tiles.forEach(tile => {

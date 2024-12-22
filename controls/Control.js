@@ -1,6 +1,6 @@
 import { State } from "./State.js";
 import { InputHandler } from "./InputHandler.js";
-import { SpriteAnimation } from "./SpriteAnimation.js";
+import { SpriteAnimation } from "../animation/SpriteAnimation.js";
 class Control{
     constructor(player,input){
         this.input = input;
@@ -68,7 +68,7 @@ class Walk extends State{
             player.speed=0;
             player.vy = 0;
         }
-        /*player.x += player.speed;
+        player.x += player.speed;
         this.animation.x +=player.speed;
         if(player.x < 0){ 
             player.x = 0;
@@ -89,7 +89,7 @@ class Walk extends State{
         if(player.y < 0){
             player.y=0;
             this.animation.y = 0;    
-        }*/
+        }
     }
 
 
