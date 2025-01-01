@@ -36,11 +36,51 @@ class ChunkRenderer {
     
     
 
-
-        /*chunk.entityArray.forEach(entity => {
-            entity.draw(ctx)
-        });*/
     }
+
+    drawEntitties(chunk,ctx,control){
+        chunk.entityArray.forEach(entity => {
+            entity.draw(ctx,chunk.offsetx,chunk.offsetY);
+        });
+    }
+
+    drawEntittiesDynamic(chunks,ctx,control){
+        const entityInForeground = new Map()
+        const entityInBackground = new Map()
+        chunks.forEach(chunk => {
+            chunk.entityArray.forEach(entity =>{
+                if(entity.layer==1){
+                    if(entityInBackground.has(chunk)){
+                        entityInBackground.get(chunk).push(entity)
+                    }else{
+                        entityInBackground.set(chunk,[entity])
+                    }
+                }
+
+                if(entity.layer==2){
+                    if(entityInForeground.has(chunk)){
+                        entityInForeground.get(chunk).push(entity)
+                    }else{
+                        entityInForeground.set(chunk,[entity])
+                    }
+                }
+            })
+            
+        })
+        entityInBackground.forEach((entityArray,chunk) => {
+            entityArray.forEach(entity => {
+                entity.draw(ctx,chunk.offsetx,chunk.offsetY);
+            })
+            
+        })
+        control.state.animation.drawSprite(ctx);
+        entityInForeground.forEach((entityArray,chunk) => {
+            entityArray.forEach(entity => {
+                entity.draw(ctx,chunk.offsetx,chunk.offsetY);
+            })
+        })
+    }
+
 
     scroll(chunk, input){
         let speed = 5*chunk.speedmodifier;   

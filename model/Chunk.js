@@ -4,6 +4,9 @@
 
 */
 
+import { EntityGenerator } from "../data/EntityGenerator.js";
+import { TreeEntity } from "../model/TreeEntity.js";
+
 
 class Chunk {
     static maxTileCount=200;
@@ -11,7 +14,14 @@ class Chunk {
     static maxTileCountHeight=10;
 
     static copyChunk(chunk){
-        return new Chunk(chunk.entityArray,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation)
+        let entityarrayCopy = []
+        chunk.entityArray.forEach(entity => {
+            if(entity instanceof TreeEntity){
+            let tree = EntityGenerator.generateEntity("101",entity.x,entity.y,entity.width,entity.heigt)
+            entityarrayCopy.push(tree)
+            }
+        })
+        return new Chunk(entityarrayCopy,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation)
     }
 
     constructor(entityArray,x,y,tiles,tileVariation){

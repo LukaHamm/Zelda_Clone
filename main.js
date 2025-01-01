@@ -5,6 +5,7 @@ import { Background } from "./renderer/Background.js";
 import { ChunkLoader } from "./data/ChunkLoaader.js";
 import {Chunk} from "./model/Chunk.js"
 import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
+import { Layer } from "./renderer/Layer.js";
 
     window.addEventListener('load', function(){
         const canvas = this.document.getElementById('canvas1')
@@ -23,6 +24,7 @@ import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
         const control = new Control(player, input)
         const chunkLoader = new ChunkLoader();
         const chunkRenderer = new ChunkRenderer();
+        const layer = new Layer();
         let lastTime = 0;
 
         
@@ -57,6 +59,7 @@ import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
             //ctx.drawImage(backgroundImage,0,0,canvas.width,canvas.height);
             background.update(input)
             background.draw(ctx,input)
+            
             chunks.forEach(chunkCopy => {
                 chunkRenderer.scroll(chunkCopy,input);
             })
@@ -64,7 +67,10 @@ import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
                 chunkRenderer.draw(chunkCopy,ctx);
             })
             control.changeState(player)
-            control.state.animation.drawSprite(ctx);
+            //control.state.animation.drawSprite(ctx);
+            layer.renderOrder(chunks,player)
+            chunkRenderer.drawEntittiesDynamic(chunks,ctx,control);
+
             //player.update();
             control.playerAction(player,deltaTime)
             if (!gameOver)requestAnimationFrame(animate);

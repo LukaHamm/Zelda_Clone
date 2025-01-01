@@ -10,8 +10,8 @@ class TreeEntity extends Entity {
 
     }
 
-    draw(ctx){
-        ctx.drawImage(this.image,0,0,this.width,this.heigt,this.x,this.y,this.width,this.heigt);
+    draw(ctx,offsetx,offsetY){
+        ctx.drawImage(this.image,0,0,957,896,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
     }
     
 }
