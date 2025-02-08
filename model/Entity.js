@@ -1,20 +1,25 @@
 class Entity {
     static EnityID;
 
-    static copyEntity(entitiy){
-        return new Entity(entitiy.x,entitiy.y, entitiy.heigt,entitiy.width,entitiy.hitboxX,entitiy.hitboxY,entitiy.hitboxWidth,entitiy.hitboxHeight)
-    }
+
     
-    constructor(x,y, heigt,width,hitboxX,hitboxY,hitboxWidth,hitboxHeight){
+    constructor(x,y, heigt,width,hitboxFront, hitboxBack){
         this.x=x;
         this.y=y;
-        this.width = heigt;
-        this.heigt = width;
-        this.hitboxX=hitboxX;
-        this.hitboxY=hitboxY
-        this.hitboxWidth = hitboxWidth
-        this.hitboxHeight = hitboxHeight
+        this.width = width;
+        this.heigt = heigt;
+        this.hitboxFront=hitboxFront;
+        this.hitboxBack=hitboxBack
         this.layer;
+        this.inFrame = false;
+    }
+
+    updateHitbox(dx,dy){
+        this.hitboxFront.x +=dx;
+        this.hitboxBack.x +=dx;
+        this.hitboxFront.y += dy;
+        this.hitboxBack.y += dy;
+
     }
 
     update (){
@@ -23,6 +28,16 @@ class Entity {
 
     draw(){
         
+    }
+
+
+
+    getHitBox(){
+        if(this.layer == 2){
+            return this.hitboxBack;
+        }else{
+            return this.hitboxFront;
+        }
     }
  
 }

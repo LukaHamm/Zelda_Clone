@@ -93,6 +93,7 @@ class ChunkRenderer {
         }else if(input.keys.indexOf("ArrowUp") >-1){
             chunk.offsetY =  chunk.offsetY +speed
         }
+        //chunk.updateEntityHitbox();
     }
 
 }

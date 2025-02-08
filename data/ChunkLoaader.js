@@ -54,7 +54,7 @@ class ChunkLoader {
         }
       }
   
-      return new Chunk(this.entities, 0, 0, this.tiles,tileSet);
+      return new Chunk(this.entities, 0, 0, this.tiles,tileSet,height,width);
     } catch (error) {
       console.error("Fehler beim Laden des Chunks:", error);
       throw error;

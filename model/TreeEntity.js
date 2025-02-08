@@ -2,7 +2,20 @@ import { Entity } from "./Entity.js";
 
 class TreeEntity extends Entity {
     constructor(x,y,width,height){
-        super(x,y,height,width);
+        const hitboxFront = {
+            x: x +width/4,
+            y: y,
+            width:width/2,
+            height: height/2
+        }
+
+        const hitboxBack = {
+            x: x+width/4,
+            y: y+height*4/5,
+            width: width/2,
+            height: height/5
+        }
+        super(x,y,height,width, hitboxFront,hitboxBack);
         this.image = document.getElementById("tree");
     }
 
@@ -12,6 +25,8 @@ class TreeEntity extends Entity {
 
     draw(ctx,offsetx,offsetY){
         ctx.drawImage(this.image,0,0,957,896,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
+        const hitbox = this.getHitBox();
+        ctx.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
     
 }

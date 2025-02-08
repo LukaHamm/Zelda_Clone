@@ -21,10 +21,10 @@ class Chunk {
             entityarrayCopy.push(tree)
             }
         })
-        return new Chunk(entityarrayCopy,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation)
+        return new Chunk(entityarrayCopy,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation,chunk.canvasHeight,chunk.canvasWidth)
     }
 
-    constructor(entityArray,x,y,tiles,tileVariation){
+    constructor(entityArray,x,y,tiles,tileVariation, canvasHeight,canvasWidth){
         this.entityArray = entityArray;
         this.tiles = tiles;
         this.x=x;
@@ -33,6 +33,8 @@ class Chunk {
         this.tileVariation=tileVariation;
         this.offsetx = 0;
         this.offsetY = 0;
+        this.canvasHeight=canvasHeight;
+        this.canvasWidth = canvasWidth;
     }
     
 
@@ -61,45 +63,17 @@ class Chunk {
         })
     }
 
-
-    update(input){
-        this.speed = 10*this.speedmodifier;
-        if(input.keys.indexOf("ArrowRight") > -1){
-             this.x = this.x - this.speed;
-             this.updateEntities(-this.speed,0);
-        } else if (input.keys.indexOf("ArrowLeft") > -1){
-            this.x = this.x + this.speed;
-            this.updateEntities(this.speed,0);
-        }else if (input.keys.indexOf("ArrowDown") > -1){
-            this.y = this.y - this.speed;
-            this.updateEntities(0,-this.speed);
-        }else if(input.keys.indexOf("ArrowUp") >-1){
-            this.y = this.y + this.speed;
-            this.updateEntities(0,this.speed);
-        }
-    }
-
-    updateEntities(dx,dy){
-        this.entityArray.forEach(entitiy => {
-            entitiy.x += dx;
-            entitiy.y += dy;
+    updateEntityHitbox(){
+        this.entityArray.forEach(entity => {
+            //entity.updateHitbox(this.offsetx,this.offsetY)
+            if(entity.x > 0, entity.x < this.canvasWidth, entity.y > 0, entity.y < this.canvasHeight){
+                entity.inFrame = true;
+            }
         })
     }
-        
 
-    checkCollisionWithEntity(player){
-        this.entityArray.array.forEach(row => {
-            row.forEach(entitiy =>{
-             if(player.x < entitiy.x + entitiy.width &&
-                player.x + player.width > entitiy.x &&
-                player.y < entitiy.y + entitiy.height &&
-                player.y + player.height > entitiy.y){
-                return true;
-             }
-            })
-         });
-         return false;
-    }
+
+    
 
 
 }

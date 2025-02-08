@@ -8,6 +8,10 @@ class State {
 
     }
 
+    prepareAction(player,input){
+        
+    }
+
     changeState(input, player){
         if (input.keys.length == 0){
             if(this instanceof Idle != true){

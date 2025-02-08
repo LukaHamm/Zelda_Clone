@@ -17,6 +17,10 @@ class Control{
         this.state.playerAction(player,this.input,deltaTime);
     }
 
+    prepareAction(player){
+        this.state.prepareAction(player,this.input);
+    }
+
 
 
 }
@@ -40,9 +44,8 @@ class Walk extends State{
         this.animation = new SpriteAnimation(1024,1024,0,1,7,'playerImage',30,player.x,player.y,player.width,player.heigt)
     }
 
-    
-    playerAction(player, input, deltaTime){
-        this.animation.updateSprite(deltaTime);
+    prepareAction(player,input){
+        
         if(input.keys.indexOf("ArrowRight") > -1){
             player.speed=5;
             player.vy=0
@@ -68,6 +71,10 @@ class Walk extends State{
             player.speed=0;
             player.vy = 0;
         }
+    }
+    
+    playerAction(player, input, deltaTime){
+        this.animation.updateSprite(deltaTime);
         player.x += player.speed;
         this.animation.x +=player.speed;
         if(player.x < 0){ 
@@ -90,6 +97,7 @@ class Walk extends State{
             player.y=0;
             this.animation.y = 0;    
         }
+        player.updatePlayerHitBox();
     }
 
 

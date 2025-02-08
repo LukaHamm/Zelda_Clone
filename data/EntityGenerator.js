@@ -11,4 +11,5 @@ class EntityGenerator{
     }
 }
 
+
 export {EntityGenerator}
