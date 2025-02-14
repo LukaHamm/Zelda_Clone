@@ -16,7 +16,7 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
         let enemies = [];
         let score = 0;
         let gameOver = false;
-    
+        const rootChunk = "0000100005"
     
         const backgroundImage = document.getElementById("background");
         const background = new Background(document.getElementById("background"),0.5,canvas.width,canvas.height); 
@@ -31,7 +31,7 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
 
         
         
-        chunkLoader.loadChunk("00",canvas.width,canvas.height).then(chunk =>{
+        chunkLoader.loadChunk(rootChunk,canvas.width,canvas.height).then(chunk =>{
         const chunks = [];
         for(let i = 0;i<9;i++){
             let kopie = Chunk.copyChunk(chunk);

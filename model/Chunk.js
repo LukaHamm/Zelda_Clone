@@ -21,10 +21,10 @@ class Chunk {
             entityarrayCopy.push(tree)
             }
         })
-        return new Chunk(entityarrayCopy,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation,chunk.canvasHeight,chunk.canvasWidth)
+        return new Chunk(entityarrayCopy,chunk.x,chunk.y,chunk.tiles,chunk.tileVariation,chunk.canvasHeight,chunk.canvasWidth,chunk.chunkid)
     }
 
-    constructor(entityArray,x,y,tiles,tileVariation, canvasHeight,canvasWidth){
+    constructor(entityArray,x,y,tiles,tileVariation, canvasHeight,canvasWidth,chunkid){
         this.entityArray = entityArray;
         this.tiles = tiles;
         this.x=x;
@@ -35,6 +35,7 @@ class Chunk {
         this.offsetY = 0;
         this.canvasHeight=canvasHeight;
         this.canvasWidth = canvasWidth;
+        this.chunkid=chunkid;
     }
     
 

@@ -54,14 +54,62 @@ class ChunkLoader {
         }
       }
   
-      return new Chunk(this.entities, 0, 0, this.tiles,tileSet,height,width);
+      return new Chunk(this.entities, 0, 0, this.tiles,tileSet,height,width,chunkid);
     } catch (error) {
       console.error("Fehler beim Laden des Chunks:", error);
       throw error;
     }
   }
-  
 
+
+  preLoad(activeChunkId,width, height){
+    //removeOld Chunks
+    /*
+      chunk 3 chunk 4 chunk 5
+      chunk 2 chunk 0000000000 chunk 1
+      chunk 6 chunk 7 chunk 8
+    */
+    //load new Chunks
+    const chunkRow =  parseInt(activeChunkId.substring(0,6));
+    const chunkColumn = parseInt(activeChunkId.substring(6,activeChunkId.length -1));
+    let nextChunkIds = [];
+    let nextChunks = [];
+    if(chunkColumn > 0){
+        let newColumn = chunkColumn -1;
+        nextChunkIds.push(chunkRow.toString() + newColumn.toString())
+    }
+    if(chunkColumn < 99999){
+      let newColumn = chunkColumn +1;
+      nextChunkIds.push(chunkRow.toString() + newColumn.toString())
+    }
+    if(chunkRow > 0){
+      let newRow = chunkRow -1;
+      nextChunkIds.push(newRow.toString() + chunkColumn.toString())
+    }
+    if(chunkRow < 99999){
+      let newRow = chunkRow -1;
+      nextChunkIds.push(newRow.toString() + chunkColumn.toString())
+    }
+
+    nextChunkIds.forEach(chunkId => {
+      this.loadChunk(chunkId, width, height).then( loadedChunk => {
+        this.calculateChunkOffset(loadedChunk,activeChunkId,chunkId,width,height);
+        nextChunks.push(loadedChunk);
+      })
+    })
+    return nextChunks;
+  }
+  
+  calculateChunkOffset(chunk, activeChunkId, chunkid, width, height){
+    const activeChunkRow =  parseInt(activeChunkId.substring(0,6));
+    const activeChunkColumn = parseInt(activeChunkId.substring(6,activeChunkId.length -1));
+    const chunkRow =  parseInt(chunkid.substring(0,6));
+    const chunkColumn = parseInt(chunkid.substring(6,chunkid.length -1));
+    const chunkOffsetyMultiplicator = activeChunkRow-chunkRow;
+    const chunkOffsetxMultiplicator = chunkColumn - activeChunkColumn;
+    chunk.setOffsetX(chunkOffsetxMultiplicator * width);
+    chunk.setOffsetY(chunkOffsetyMultiplicator * height)
+  }
 
   storeChunk(chunkid, chunk) {
     let chunkString = JSON.stringify(chunk)
