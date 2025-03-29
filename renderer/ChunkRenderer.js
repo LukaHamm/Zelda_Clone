@@ -1,4 +1,5 @@
 class ChunkRenderer {
+    static iteration = 5;
     constructor(){
 
     }
@@ -83,7 +84,7 @@ class ChunkRenderer {
 
 
     scroll(chunk, input){
-        let speed = 5*chunk.speedmodifier;   
+        let speed = ChunkRenderer.iteration*chunk.speedmodifier;   
         if(input.keys.indexOf("ArrowRight") > -1){
              chunk.offsetx =chunk.offsetx - speed;
         } else if (input.keys.indexOf("ArrowLeft") > -1){
@@ -93,7 +94,7 @@ class ChunkRenderer {
         }else if(input.keys.indexOf("ArrowUp") >-1){
             chunk.offsetY =  chunk.offsetY +speed
         }
-        //chunk.updateEntityHitbox();
+        chunk.updateEntityHitbox();
     }
 
 }

@@ -62,18 +62,21 @@ class ChunkLoader {
   }
 
 
-  preLoad(activeChunkId,width, height){
+  async preLoad(activeChunkId,width, height){
     //removeOld Chunks
     /*
       chunk 3 chunk 4 chunk 5
       chunk 2 chunk 0000000000 chunk 1
       chunk 6 chunk 7 chunk 8
+         +1 -1   +1 0  +1 +1
+          0 -1  active 0 +1
+          -1 -1  -1 0 -1 +1
+
     */
     //load new Chunks
-    const chunkRow =  parseInt(activeChunkId.substring(0,6));
-    const chunkColumn = parseInt(activeChunkId.substring(6,activeChunkId.length -1));
+    const chunkRow =  parseInt(activeChunkId.substring(0,5));
+    const chunkColumn = parseInt(activeChunkId.substring(5,activeChunkId.length));
     let nextChunkIds = [];
-    let nextChunks = [];
     if(chunkColumn > 0){
         let newColumn = chunkColumn -1;
         nextChunkIds.push(chunkRow.toString() + newColumn.toString())
@@ -87,28 +90,130 @@ class ChunkLoader {
       nextChunkIds.push(newRow.toString() + chunkColumn.toString())
     }
     if(chunkRow < 99999){
-      let newRow = chunkRow -1;
+      let newRow = chunkRow +1;
       nextChunkIds.push(newRow.toString() + chunkColumn.toString())
     }
+    if(chunkRow < 99999 && chunkColumn < 99999){
+      let newRow = chunkRow +1;
+      let newColumn = chunkColumn +1;
+      nextChunkIds.push(newRow.toString() + newColumn.toString())
+    }
 
-    nextChunkIds.forEach(chunkId => {
-      this.loadChunk(chunkId, width, height).then( loadedChunk => {
-        this.calculateChunkOffset(loadedChunk,activeChunkId,chunkId,width,height);
-        nextChunks.push(loadedChunk);
-      })
-    })
+    if(chunkRow > 0 && chunkColumn < 99999){
+      let newRow = chunkRow -1;
+      let newColumn = chunkColumn +1;
+      nextChunkIds.push(newRow.toString() + newColumn.toString())
+    }
+
+    if(chunkRow > 0 && chunkColumn > 0){
+      let newRow = chunkRow -1;
+      let newColumn = chunkColumn -1;
+      nextChunkIds.push(newRow.toString() + newColumn.toString())
+    }
+
+    if(chunkRow < 99999 && chunkColumn > 0){
+      let newRow = chunkRow +1;
+      let newColumn = chunkColumn -1;
+      nextChunkIds.push(newRow.toString() + newColumn.toString())
+    }
+    //besser await?
+    nextChunkIds.push(activeChunkId)
+    const chunkPromises = nextChunkIds.map(chunkId => 
+      this.loadChunk(chunkId, width, height)
+        .then(loadedChunk => {
+          this.calculateChunkOffset(loadedChunk, activeChunkId, chunkId, width, height);
+          return loadedChunk;
+        })
+    );
+    const nextChunks = await Promise.all(chunkPromises);
     return nextChunks;
   }
   
   calculateChunkOffset(chunk, activeChunkId, chunkid, width, height){
-    const activeChunkRow =  parseInt(activeChunkId.substring(0,6));
-    const activeChunkColumn = parseInt(activeChunkId.substring(6,activeChunkId.length -1));
-    const chunkRow =  parseInt(chunkid.substring(0,6));
-    const chunkColumn = parseInt(chunkid.substring(6,chunkid.length -1));
+    const activeChunkRow =  parseInt(activeChunkId.substring(0,5));
+    const activeChunkColumn = parseInt(activeChunkId.substring(5,activeChunkId.length));
+    const chunkRow =  parseInt(chunkid.substring(0,5));
+    const chunkColumn = parseInt(chunkid.substring(5,chunkid.length));
     const chunkOffsetyMultiplicator = activeChunkRow-chunkRow;
     const chunkOffsetxMultiplicator = chunkColumn - activeChunkColumn;
     chunk.setOffsetX(chunkOffsetxMultiplicator * width);
     chunk.setOffsetY(chunkOffsetyMultiplicator * height)
+  }
+
+
+  async loadNext(chunks,activeChunkId,width, height, player){
+    // neuer rootchunk mit default werten, absolute position des spielers verschieben
+    let loadedChunks = await this.preLoad(activeChunkId,width,height);  
+    let activeChunkOld = chunks.find(chunk => chunk.chunkid === activeChunkId);
+    let newPlayerY = activeChunkOld.offsetx
+    let addedChunks = loadedChunks.filter(chunk => {
+      return !chunks.some(currentChunk => currentChunk.chunkid === chunk.chunkid);
+    })
+    let oldChunks = chunks.filter(chunk =>{
+      return loadedChunks.some(currentChunk => currentChunk.chunkid === chunk.chunkid);
+    })
+    this.adjustChunkOffSet(activeChunkOld,addedChunks);
+    let newChunks = addedChunks.concat(oldChunks)
+    
+    return newChunks;
+  }
+
+
+  adjustChunkOffSet(oldRootChunk, chunks) {
+    const activeChunkRow =  parseInt(oldRootChunk.chunkid.substring(0,5));
+    const activeChunkColumn = parseInt(oldRootChunk.chunkid.substring(5,oldRootChunk.chunkid.length));
+    const relativeactiveChunkColumn = 1
+    const relativeActiveChunkRow = 1
+    //Überarbeiten
+    /*
+      unten/oben
+        |       |    |
+       ---   -> |    | <-
+        |       |    |
+
+    */
+    let chunksLoaded = [["0","0","0"],
+                        ["0","0","0"],
+                        ["0","0","0"]]
+    chunks.forEach(chunk => {
+      const chunkRow =  parseInt(chunk.chunkid.substring(0,5));
+      const chunkColumn = parseInt(chunk.chunkid.substring(5,chunk.chunkid.length));
+      const chunkColumnDiffrence = chunkColumn - activeChunkColumn;
+      const chunkRowDifference = chunkRow - activeChunkRow;
+      const relativeChunkRow = chunkRowDifference + relativeActiveChunkRow;
+      const relativeChunkColumn = chunkColumnDiffrence + relativeactiveChunkColumn;
+      chunksLoaded[relativeChunkRow][relativeChunkColumn] = "-";
+    });
+
+    //check right column
+    if(chunksLoaded[0][2] === "-" && chunksLoaded[1][2] === "-" && chunksLoaded[2][2] === "-"){
+      chunks.forEach(chunk => {
+        chunk.offsetY += oldRootChunk.offsetY
+      })
+    }
+
+    //check left column
+    if(chunksLoaded[0][0] === "-" && chunksLoaded[1][0] === "-" && chunksLoaded[2][0] === "-"){
+      chunks.forEach(chunk => {
+        chunk.offsetY += oldRootChunk.offsetY
+      })
+    }
+
+    //check lower row
+    if(chunksLoaded[2][0] === "-" && chunksLoaded[2][1] === "-" && chunksLoaded[2][2] === "-"){
+      chunks.forEach(chunk => {
+        chunk.offsetx += oldRootChunk.offsetx
+      })
+    }
+
+    //chunk upper row
+    if(chunksLoaded[0][0] === "-" && chunksLoaded[0][1] === "-" && chunksLoaded[0][2] === "-"){
+      chunks.forEach(chunk => {
+        chunk.offsetx += oldRootChunk.offsetx
+      })
+    }
+
+
   }
 
   storeChunk(chunkid, chunk) {
