@@ -29,11 +29,11 @@ class Idle extends State {
 
     constructor(player){
         super();
-        this.animation = new SpriteAnimation(1024,1024,0,0,7,'playerIdle',30,player.x,player.y,player.width,player.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,0,5,'playerIdle',30,player.x,player.y,player.width,player.heigt)
     }
 
     playerAction(player,input, deltaTime){
-        
+        this.animation.updateSprite(deltaTime);
     }
     
 }
