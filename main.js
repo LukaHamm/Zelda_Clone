@@ -95,7 +95,6 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             layer.renderOrder(chunks,player)
             chunkRenderer.drawEntittiesDynamic(chunks,ctx,control);
             const hitboxPlayer = player.getHitBox();
-            ctx.strokeRect(hitboxPlayer.x, hitboxPlayer.y, hitboxPlayer.width, hitboxPlayer.height);
             if (rootChunk !== undefined){
             let newRootChunk = determineNextRootChunk(rootChunk,chunks);
             if(newRootChunk != null){

@@ -25,8 +25,6 @@ class TreeEntity extends Entity {
 
     draw(ctx,offsetx,offsetY){
         ctx.drawImage(this.image,0,0,957,896,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
-        const hitbox = this.getHitBox();
-        ctx.strokeRect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
     }
     
 }
