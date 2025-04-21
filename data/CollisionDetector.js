@@ -3,11 +3,11 @@ class CollisionDetector {
 
     }
 
-    static isCollision(chunk,hitboxA,hitboxB){
-        return ((hitboxA.x + chunk.offsetx) <= (hitboxB.x + hitboxB.speed + hitboxB.width) &&
-            (hitboxA.x + chunk.offsetx + hitboxA.width) >= (hitboxB.x + hitboxB.speed) &&
-            (hitboxA.y+ chunk.offsetY) <= (hitboxB.y + hitboxB.vy + hitboxB.heigt) &&
-            (hitboxA.y + chunk.offsetY + hitboxA.height) >= (hitboxB.y + hitboxB.vy));
+    static isCollision(chunk,hitboxA,player){
+        return ((hitboxA.x + chunk.offsetx) <= (player.getHitBox().x + player.speed + player.getHitBox().width) &&
+            (hitboxA.x + chunk.offsetx + hitboxA.width) >= (player.getHitBox().x + player.speed) &&
+            (hitboxA.y+ chunk.offsetY) <= (player.getHitBox().y + player.vy + player.getHitBox().height) &&
+            (hitboxA.y + chunk.offsetY + hitboxA.height) >= (player.getHitBox().y + player.vy));
     }
 
 }

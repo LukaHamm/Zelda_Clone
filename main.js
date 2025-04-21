@@ -93,6 +93,7 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             control.changeState(player)
             //control.state.animation.drawSprite(ctx);
             layer.renderOrder(chunks,player)
+            ctx.strokeRect(player.hitboxBack.x,player.hitboxBack.y,player.hitboxBack.width,player.hitboxBack.height)
             chunkRenderer.drawEntittiesDynamic(chunks,ctx,control);
             const hitboxPlayer = player.getHitBox();
             if (rootChunk !== undefined){
@@ -109,7 +110,9 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             //player.update();
             
             
-            if(!isHit) control.playerAction(player,deltaTime)
+            if(!isHit){ 
+                control.playerAction(player,deltaTime)
+            }
             if (!gameOver)requestAnimationFrame(animate);
         }   
         animate(0);

@@ -111,6 +111,8 @@ class Attack extends State {
     }
 
     playerAction(player, input, deltaTime){
+        //update player hitbox
+        player.updatePlayerHitBox();
         this.animation.updateSprite(deltaTime);
     }
 
@@ -118,25 +120,17 @@ class Attack extends State {
         if(input.keys.indexOf("ArrowDown") > -1){
             this.animation.maxFrame = 9;
             this.animation.frameY= 2;
-            
         } else if (input.keys.indexOf("ArrowUp") > -1){
-            player.speed=-5
-            player.vy=0
             this.animation.maxFrame = 9;
             this.animation.frameY = 3;
         }else if (input.keys.indexOf("ArrowLeft") > -1){
-            player.vy=5
-            player.speed=0;
             this.animation.maxFrame = 9;
             this.animation.frameY = 1;
         }else if(input.keys.indexOf("ArrowRight") >-1){
-            player.vy=-5;
-            player.speed=0;
             this.animation.maxFrame = 9;
             this.animation.frameY = 0;
         }else {
-            player.speed=0;
-            player.vy = 0;
+            
         }
     }
 

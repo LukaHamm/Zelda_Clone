@@ -24,7 +24,7 @@ class Player extends Entity{
     }
 
     updatePlayerHitBox(){
-        if(this.x +this.speed >= 0 && this.x + this.width +this.speed <= this.gameWidth && this.y > 0){
+        if(this.x +this.speed > 0 && this.x + this.width +this.speed < this.gameWidth && this.y > 0 && this.y + this.heigt + this.speed < this.gameHeight){
             this.updateHitbox(this.speed,this.vy);
         }
         if(this.y < 0){
