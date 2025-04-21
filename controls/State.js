@@ -1,5 +1,6 @@
 import { Idle } from "./Control.js";
 import { Walk } from "./Control.js";
+import { Attack } from "./Control.js";
 class State {
     constructor(){
     }
@@ -19,14 +20,24 @@ class State {
             }else {
                 return this;
             }
-        }else  if(input.keys.indexOf("ArrowLeft") > -1 
-        || input.keys.indexOf("ArrowRight") > -1 || input.keys.indexOf("ArrowDown") >-1 || input.keys.indexOf("ArrowUp") >-1){
+        }else  if(input.keys.indexOf("a") > -1 
+        || input.keys.indexOf("d") > -1 || input.keys.indexOf("s") >-1 || input.keys.indexOf("w") >-1){
             if(this instanceof Walk !=true){
                 return new Walk(player);
             }else {
                 return this;
             }
             
+        } else if (input.keys.indexOf("ArrowDown") > -1 
+        || input.keys.indexOf("ArrowUp") > -1 || input.keys.indexOf("ArrowLeft") >-1 || input.keys.indexOf("ArrowRight") >-1){
+            if(this instanceof Attack !=true){
+                return new Attack(player);
+            }else {
+                return this;
+            }
+        } 
+        else {
+            return this;
         }
     }
 

@@ -85,13 +85,13 @@ class ChunkRenderer {
 
     scroll(chunk, input){
         let speed = ChunkRenderer.iteration*chunk.speedmodifier;   
-        if(input.keys.indexOf("ArrowRight") > -1){
+        if(input.keys.indexOf("d") > -1){
              chunk.offsetx =chunk.offsetx - speed;
-        } else if (input.keys.indexOf("ArrowLeft") > -1){
+        } else if (input.keys.indexOf("a") > -1){
             chunk.offsetx =chunk.offsetx + speed;
-        }else if (input.keys.indexOf("ArrowDown") > -1){
+        }else if (input.keys.indexOf("s") > -1){
             chunk.offsetY =  chunk.offsetY -speed
-        }else if(input.keys.indexOf("ArrowUp") >-1){
+        }else if(input.keys.indexOf("w") >-1){
             chunk.offsetY =  chunk.offsetY +speed
         }
         chunk.updateEntityHitbox();

@@ -46,23 +46,23 @@ class Walk extends State{
 
     prepareAction(player,input){
         
-        if(input.keys.indexOf("ArrowRight") > -1){
+        if(input.keys.indexOf("d") > -1){
             player.speed=5;
             player.vy=0
             this.animation.maxFrame = 7;
             this.animation.frameY= 1;
             
-        } else if (input.keys.indexOf("ArrowLeft") > -1){
+        } else if (input.keys.indexOf("a") > -1){
             player.speed=-5
             player.vy=0
             this.animation.maxFrame = 7;
             this.animation.frameY = 0;
-        }else if (input.keys.indexOf("ArrowDown") > -1){
+        }else if (input.keys.indexOf("s") > -1){
             player.vy=5
             player.speed=0;
             this.animation.maxFrame = 7;
             this.animation.frameY = 2;
-        }else if(input.keys.indexOf("ArrowUp") >-1){
+        }else if(input.keys.indexOf("w") >-1){
             player.vy=-5;
             player.speed=0;
             this.animation.maxFrame = 7;
@@ -100,7 +100,46 @@ class Walk extends State{
         player.updatePlayerHitBox();
     }
 
+}
+
+
+class Attack extends State {
+
+    constructor(player){
+        super();
+        this.animation = new SpriteAnimation(1024,1024,0,1,9,'playerAttack',60,player.x,player.y,player.width,player.heigt)
+    }
+
+    playerAction(player, input, deltaTime){
+        this.animation.updateSprite(deltaTime);
+    }
+
+    prepareAction(player,input){
+        if(input.keys.indexOf("ArrowDown") > -1){
+            this.animation.maxFrame = 9;
+            this.animation.frameY= 2;
+            
+        } else if (input.keys.indexOf("ArrowUp") > -1){
+            player.speed=-5
+            player.vy=0
+            this.animation.maxFrame = 9;
+            this.animation.frameY = 3;
+        }else if (input.keys.indexOf("ArrowLeft") > -1){
+            player.vy=5
+            player.speed=0;
+            this.animation.maxFrame = 9;
+            this.animation.frameY = 1;
+        }else if(input.keys.indexOf("ArrowRight") >-1){
+            player.vy=-5;
+            player.speed=0;
+            this.animation.maxFrame = 9;
+            this.animation.frameY = 0;
+        }else {
+            player.speed=0;
+            player.vy = 0;
+        }
+    }
 
 }
 
-export {Control, Idle, Walk}
+export {Control, Idle, Walk, Attack}

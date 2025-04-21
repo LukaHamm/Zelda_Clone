@@ -24,6 +24,27 @@ class InputHandler{
             }
         })
 
+        window.addEventListener('keydown', e =>{
+            if((e.key === 'w'
+                || e.key === 'a'
+                || e.key === 's'
+                || e.key === 'd')
+                && this.keys.indexOf(e.key) === -1){
+                this.keys.push(e.key)
+            } else if (e.key === 'Enter' && gameOver){
+                restartGame();
+            }
+        })
+
+        window.addEventListener('keyup', e =>{
+            if(e.key === 'w' 
+                || e.key === 'a'
+                || e.key === 's'
+                || e.key === 'd'){
+                this.keys.splice(this.keys.indexOf(e.key),1)
+            }
+        })
+
         window.addEventListener('touchstart', e => {
             console.log('start')
             this.touchY = e.changedTouches[0].pageY;

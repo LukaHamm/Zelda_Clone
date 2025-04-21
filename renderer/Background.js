@@ -15,22 +15,22 @@ class Background{
     update(input){
         this.speed = 10*this.speedmodifier;
         
-        if(input.keys.indexOf("ArrowRight") > -1){
+        if(input.keys.indexOf("d") > -1){
             if(this.x <= -this.width){
                 this.x = 0;
             }
              this.x = this.x - this.speed;
-        } else if (input.keys.indexOf("ArrowLeft") > -1){
+        } else if (input.keys.indexOf("a") > -1){
             if(this.x >= this.width){
                 this.x = 0;
             }
             this.x = this.x + this.speed;
-        }else if (input.keys.indexOf("ArrowDown") > -1){
+        }else if (input.keys.indexOf("s") > -1){
             if(this.y <= -this.height){
                 this.y = 0;
             }
             this.y = this.y - this.speed;
-        }else if(input.keys.indexOf("ArrowUp") >-1){
+        }else if(input.keys.indexOf("w") >-1){
             if(this.y >= this.height){
                 this.y = 0;
             }
