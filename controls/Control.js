@@ -110,6 +110,7 @@ class Attack extends State {
         this.animation = new SpriteAnimation(1024,1024,0,1,9,'playerAttack',60,player.x,player.y,player.width,player.heigt)
     }
 
+
     playerAction(player, input, deltaTime){
         //update player hitbox
         player.updatePlayerHitBox();
@@ -117,18 +118,31 @@ class Attack extends State {
     }
 
     prepareAction(player,input){
+        let multiplyer = this.animation.frameX > player.currentAttackBox.frameAttackMotion?player.currentAttackBox.multiplyerEndMotion:player.currentAttackBox.multiplyerBeginMotion;
         if(input.keys.indexOf("ArrowDown") > -1){
             this.animation.maxFrame = 9;
             this.animation.frameY= 2;
+            player.currentAttackBox = player.attackboxBack;
+            player.updateAttackHitbox(player.x,player.y);
+            player.moveHitBox(multiplyer*player.currentAttackBox.swingStep)
         } else if (input.keys.indexOf("ArrowUp") > -1){
             this.animation.maxFrame = 9;
             this.animation.frameY = 3;
+            player.currentAttackBox = player.attackboxFront;
+            player.updateAttackHitbox(player.x,player.y);
+            player.moveHitBox(multiplyer*player.currentAttackBox.swingStep)
         }else if (input.keys.indexOf("ArrowLeft") > -1){
             this.animation.maxFrame = 9;
             this.animation.frameY = 1;
+            player.currentAttackBox = player.attackboxLeft
+            player.updateAttackHitbox(player.x,player.y);
+            player.moveHitBox(multiplyer*player.currentAttackBox.swingStep)
         }else if(input.keys.indexOf("ArrowRight") >-1){
             this.animation.maxFrame = 9;
             this.animation.frameY = 0;
+            player.currentAttackBox = player.attackboxRight
+            player.updateAttackHitbox(player.x,player.y);
+            player.moveHitBox(multiplyer*player.currentAttackBox.swingStep)
         }else {
             
         }

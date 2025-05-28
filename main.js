@@ -1,12 +1,13 @@
 import { Player } from "./model/Player.js";
 import { InputHandler } from "./controls/InputHandler.js";
-import {Control, Idle, Walk} from "./controls/Control.js"
+import {Attack, Control, Idle, Walk} from "./controls/Control.js"
 import { Background } from "./renderer/Background.js";
 import { ChunkLoader } from "./data/ChunkLoaader.js";
 import {Chunk} from "./model/Chunk.js"
 import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
 import { Layer } from "./renderer/Layer.js";
 import { CollisionDetector } from "./data/CollisionDetector.js";
+import { Enemy } from "./model/Enemy.js";
 
     window.addEventListener('load', function(){
         const canvas = this.document.getElementById('canvas1')
@@ -27,12 +28,12 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
         const chunkRenderer = new ChunkRenderer();
         const layer = new Layer();
         let lastTime = 0;
+        let lastHit= 0;
         
         function determineNextRootChunk(rootChunk,chunks){
             const chunkRow =  parseInt(rootChunk.chunkid.substring(0,5));
             const chunkColumn = parseInt(rootChunk.chunkid.substring(5,rootChunk.chunkid.length));
             let chunkId = rootChunk.chunkid;
-            //Funktioniert nicht richtig für scroll in x-Richtung da iteration übersprungen wird
             const maxWidth = Math.floor(canvas.width /(ChunkRenderer.iteration*rootChunk.speedmodifier))*(ChunkRenderer.iteration*rootChunk.speedmodifier)
             if(rootChunk.offsetx == maxWidth){
                 let newChunkColumn = chunkColumn -1;
@@ -57,35 +58,44 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             return newRootChunk;
         }
         
+       
         
         chunkLoader.preLoad(rootChunkId,canvas.width,canvas.height).then(chunks =>{    
         async function animate(timeStamp){
             const deltaTime = timeStamp -lastTime;
+            const delaHit = timeStamp -lastHit;
             let rootChunk = chunks.find(chunk => chunk.chunkid === rootChunkId);
-            let isHit = false;
             lastTime = timeStamp;
+            player.isHit=false;
+            
             ctx.clearRect(0,0,canvas.width,canvas.height);
             background.update(input)
             background.draw(ctx,input)
-           
+            
             chunks.forEach(chunkCopy =>{
                 chunkCopy.entityArray.forEach(enity =>{
                     //TODO aufpassen dass default wert nicht überschrieben wird, updaten der hitbox location
-                    if(!isHit){
+                    if(!player.isHit){
                         if(enity.inFrame){
-                         isHit = CollisionDetector.isCollision(chunkCopy,enity.getHitBox(),player)
+                            player.isHit = CollisionDetector.isCollision(chunkCopy,enity.getHitBox(),player)
+                            if(control.state instanceof Attack){
+                                if(enity instanceof Enemy){
+                                    enity.move();
+                                    enity.isHit=false;
+                                }
+                            }
                         }
                     }
                     
                 })
             })
-            if(!isHit){
-            chunks.forEach(chunkCopy => {
-                if(control.state instanceof Walk){
-                chunkRenderer.scroll(chunkCopy,input);
-                }
-            })
-        }
+            if(!player.isHit){
+                chunks.forEach(chunkCopy => {
+                    if(control.state instanceof Walk){
+                    chunkRenderer.scroll(chunkCopy,input);
+                    }
+                })
+            }
             chunks.forEach(chunkCopy =>{
                 chunkRenderer.draw(chunkCopy,ctx);
             })
@@ -94,6 +104,10 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             //control.state.animation.drawSprite(ctx);
             layer.renderOrder(chunks,player)
             ctx.strokeRect(player.hitboxBack.x,player.hitboxBack.y,player.hitboxBack.width,player.hitboxBack.height)
+            ctx.strokeRect(player.attackboxRight.x,player.attackboxRight.y,player.attackboxRight.width,player.attackboxRight.height)
+            ctx.strokeRect(player.attackboxLeft.x,player.attackboxLeft.y,player.attackboxLeft.width,player.attackboxLeft.height)
+            ctx.strokeRect(player.attackboxFront.x,player.attackboxFront.y,player.attackboxFront.width,player.attackboxFront.height)
+            ctx.strokeRect(player.attackboxBack.x,player.attackboxBack.y,player.attackboxBack.width,player.attackboxBack.height)
             chunkRenderer.drawEntittiesDynamic(chunks,ctx,control);
             const hitboxPlayer = player.getHitBox();
             if (rootChunk !== undefined){
@@ -109,9 +123,29 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
             }
             //player.update();
             
-            
-            if(!isHit){ 
+            if(!player.isHit){
                 control.playerAction(player,deltaTime)
+                if(control.state instanceof Attack){
+                     chunks.forEach(chunkCopy =>{
+                chunkCopy.entityArray.forEach(enity =>{
+                        player.isHit = CollisionDetector.isCollision(chunkCopy,enity.getHitBox(),player)
+                            if(control.state instanceof Attack){
+                                if(enity instanceof Enemy){
+                                    enity.isHit=CollisionDetector.isAttackHit(chunkCopy,enity.getHitBox(),player.currentAttackBox);
+                                    if(enity.isHit && delaHit > 500){
+                                        //chunkCopy.removeEntity(enity);
+                                        lastHit=timeStamp;
+                                        enity.health--;
+                                    }
+                                }
+                        
+                    }
+                    
+                })
+            })
+            }
+            // mit liveserver nicht möglich
+            //chunkLoader.storeChunk(rootChunk.chunkid,rootChunk,canvas.width,canvas.height);
             }
             if (!gameOver)requestAnimationFrame(animate);
         }   

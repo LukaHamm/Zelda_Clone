@@ -1,7 +1,7 @@
 import { Entity } from "./Entity.js";
 
 class TreeEntity extends Entity {
-    constructor(x,y,width,height){
+    constructor(x,y,width,height,id){
         const hitboxFront = {
             x: x +width/4,
             y: y,
@@ -15,7 +15,7 @@ class TreeEntity extends Entity {
             width: width/2,
             height: height/5
         }
-        super(x,y,height,width, hitboxFront,hitboxBack);
+        super(x,y,height,width, hitboxFront,hitboxBack,id);
         this.image = document.getElementById("tree");
     }
 

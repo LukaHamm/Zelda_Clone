@@ -3,7 +3,7 @@ class Entity {
 
 
     
-    constructor(x,y, heigt,width,hitboxFront, hitboxBack){
+    constructor(x,y, heigt,width,hitboxFront, hitboxBack, id){
         this.x=x;
         this.y=y;
         this.width = width;
@@ -12,13 +12,13 @@ class Entity {
         this.hitboxBack=hitboxBack
         this.layer;
         this.inFrame = false;
+        this.isHit=false
+        this.id = id;
     }
 
-    updateHitbox(dx,dy){
-        this.hitboxFront.x +=dx;
-        this.hitboxBack.x +=dx;
-        this.hitboxFront.y += dy;
-        this.hitboxBack.y += dy;
+    updateHitbox(newx,newy){
+        this.hitboxFront.update(newx,newy)
+        this.hitboxBack.update(newx,newy);
 
     }
 

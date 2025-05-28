@@ -74,6 +74,11 @@ class Chunk {
     }
 
 
+    removeEntity(entity){
+        this.entityArray = this.entityArray.filter(e => e.id !== entity.id)
+    }
+
+
     
 
 

@@ -10,6 +10,14 @@ class CollisionDetector {
             (hitboxA.y + chunk.offsetY + hitboxA.height) >= (player.getHitBox().y + player.vy));
     }
 
+
+    static isAttackHit(chunk,hitboxEntity, hitboxAttack){
+        return ((hitboxEntity.x + chunk.offsetx) <= (hitboxAttack.x + hitboxAttack.width) &&
+            (hitboxEntity.x + chunk.offsetx + hitboxEntity.width) >= (hitboxAttack.x) &&
+            (hitboxEntity.y+ chunk.offsetY) <= (hitboxAttack.y + hitboxAttack.height) &&
+            (hitboxEntity.y + chunk.offsetY + hitboxEntity.height) >= (hitboxAttack.y));
+    }
+
 }
 
 export{CollisionDetector}
