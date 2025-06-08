@@ -91,6 +91,7 @@ class Player extends Entity{
         this.gameHeight=gameHeight;
         this.speed = 0;
         this.vy = 0;
+        this.isHitByEnemy = false;
     }
 
     updatePlayerHitBox(){

@@ -1,5 +1,6 @@
 import { TreeEntity } from "../model/TreeEntity.js"
 import { Enemy } from "../model/Enemy.js";
+import {MovementPattern} from "../controls/MovementPattern.js";
 class EntityGenerator{
 
  
@@ -9,7 +10,10 @@ class EntityGenerator{
             case "101":
                 return new TreeEntity(x,y,width,height,entityUniqueId);
             case "102":
-                return new Enemy(x,y,width/2,height/2,entityUniqueId)
+                let enemy = new Enemy(x,y,width/2,height/2,entityUniqueId);
+                let pattern = new MovementPattern(enemy, 100, 5);
+                enemy.setMovementPattern(pattern);
+                return enemy
             default:
                 return null;
         }

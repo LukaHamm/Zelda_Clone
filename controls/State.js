@@ -1,6 +1,7 @@
 import { Idle } from "./Control.js";
 import { Walk } from "./Control.js";
 import { Attack } from "./Control.js";
+import { Invisiblity } from "./Control.js";
 class State {
     constructor(){
     }
@@ -14,7 +15,12 @@ class State {
     }
 
     changeState(input, player){
-        if (input.keys.length == 0){
+        if (player.isHitByEnemy){
+            if(this instanceof Invisiblity != true){
+                return new Invisiblity(player, this);
+            }
+        }
+        else if (input.keys.length == 0){
             if(this instanceof Idle != true){
                 return new Idle(player);
             }else {

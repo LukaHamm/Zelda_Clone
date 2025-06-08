@@ -1,4 +1,7 @@
 class CollisionDetector {
+
+    static lastHit = 0;
+    static delaHit = 500; // delay between hits in ms
     constructor(){
 
     }
@@ -11,7 +14,11 @@ class CollisionDetector {
     }
 
 
-    static isAttackHit(chunk,hitboxEntity, hitboxAttack){
+    static isAttackHit(chunk,hitboxEntity, hitboxAttack, timeStamp){
+        if(timeStamp - this.lastHit < this.delaHit){
+            return false;
+        }
+        this.lastHit = timeStamp;
         return ((hitboxEntity.x + chunk.offsetx) <= (hitboxAttack.x + hitboxAttack.width) &&
             (hitboxEntity.x + chunk.offsetx + hitboxEntity.width) >= (hitboxAttack.x) &&
             (hitboxEntity.y+ chunk.offsetY) <= (hitboxAttack.y + hitboxAttack.height) &&

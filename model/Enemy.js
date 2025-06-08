@@ -1,4 +1,5 @@
 import { Entity } from "./Entity.js";
+import { SpriteAnimation } from "../animation/SpriteAnimation.js";
 class Enemy extends Entity{
     static healthBarHeight = 20;
     constructor(x,y,width,height,id){
@@ -38,6 +39,9 @@ class Enemy extends Entity{
         this.image = document.getElementById("enemy");
         this.health=5;
         this.maxHealth = 5;
+        this.movementPattern = null;
+        this.animation = new SpriteAnimation(1024,1024,0,1,7,'playerImage',30,this.x,this.y,this.width,this.heigt)
+        this.animationState = 'idle';
     }
 
     updatePlayerHitBox(){
@@ -51,10 +55,49 @@ class Enemy extends Entity{
     }
 
     draw(ctx,offsetx,offsetY){
-        ctx.drawImage(this.image,0,0,1024,1024,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
-        ctx.strokeRect(this.hitboxBack.x+offsetx,this.hitboxBack.y+offsetY,this.hitboxBack.width,this.hitboxBack.height)
+        //ctx.drawImage(this.image,0,0,1024,1024,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
+        //ctx.strokeRect(this.hitboxBack.x+offsetx,this.hitboxBack.y+offsetY,this.hitboxBack.width,this.hitboxBack.height)
+        this.animation.x = this.x+offsetx;
+        this.animation.y = this.y+offsetY;
+        this.animation.drawSprite(ctx);
         this.drawHealthBar(ctx,offsetx,offsetY);
         
+    }
+
+    updateSprite(deltaTime){
+        let direction = this.movementPattern.direction;
+        if(this.animationState === 'moving'){
+         switch (direction) {
+            case 1: // Move up
+                this.animation.maxFrame = 7;
+                this.animation.frameY = 3;
+                break;
+            case 2: // Move down
+                this.animation.maxFrame = 7;
+                this.animation.frameY = 2;
+                break;
+            case 3: // Move left
+                this.animation.maxFrame = 7;
+                this.animation.frameY = 0;
+                break;
+            case 4: // Move right
+                this.animation.maxFrame = 7;
+                this.animation.frameY= 1;
+                break;
+        }
+    }
+        if(this.movementPattern.dy == 0 && this.movementPattern.dx == 0){
+            if(this.animationState !== 'idle'){
+                this.animation = new SpriteAnimation(1024,1024,0,0,5,'playerIdle',30,this.x,this.y,this.width,this.heigt)
+                this.animationState = 'idle';
+        }
+        }else{
+            if(this.animationState !== 'moving'){
+            this.animationState = 'moving';
+            this.animation = new SpriteAnimation(1024,1024,0,1,7,'playerImage',30,this.x,this.y,this.width,this.heigt);
+            }
+        }
+        this.animation.updateSprite(deltaTime);
     }
 
     drawHealthBar(ctx,offsetx, offsetY){
@@ -72,12 +115,28 @@ class Enemy extends Entity{
     }
 
     move(){
+        //move right
+
+        //move left
+
+        //move up
+
+        //move down
+
+        //maxMovementRadius
         this.x -=this.speed;
         //this.y += Math.random()*5-2.5;
         this.y += this.curve*Math.sin(this.angle);
         this.updateHitbox(this.x,this.y);
         this.angle += this.angleSpeed;
         if(this.x + this.width < 0) this.x = 400;
+    }
+
+    setMovementPattern(movementPattern){
+        this.movementPattern = movementPattern;
+    }
+    getMovementPattern(){
+        return this.movementPattern;
     }
 
 }
