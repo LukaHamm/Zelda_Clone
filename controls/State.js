@@ -17,6 +17,15 @@ class State {
     changeState(input, player){
         if (player.isHitByEnemy){
             if(this instanceof Invisiblity != true){
+                if(input.keys.includes("s")){
+                    player.y -= 100;
+                }else if(input.keys.includes("w")){
+                    player.y += 100;
+                }else if(input.keys.includes("a")){
+                    player.x += 100;
+                }else if(input.keys.includes("d")){
+                    player.x -= 100;
+                }
                 return new Invisiblity(player, this);
             }
         }

@@ -129,7 +129,16 @@ window.addEventListener('load', function () {
                                 if (enity instanceof Enemy) {
                                     enity.isHit = CollisionDetector.isAttackHit(chunkCopy, enity.getHitBox(), player.currentAttackBox, timeStamp);
                                     if (enity.isHit) {
-                                        enity.health--;
+                                        enity.decrementHealth();
+                                        if(control.state.animation.frameY == 1){
+                                            enity.x-=5;
+                                        }else if (control.state.animation.frameY == 0){
+                                            enity.x+=5;
+                                        }else if(control.state.animation.frameY == 3){
+                                            enity.y-=5;
+                                        }else if(control.state.animation.frameY == 2){
+                                            enity.y+=5;
+                                        }
                                     }
                                     if (enity.health <= 0) {
                                         chunkCopy.removeEntity(enity);
