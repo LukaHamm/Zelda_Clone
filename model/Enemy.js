@@ -82,11 +82,11 @@ class Enemy extends Entity{
                 break;
             case 2: // Move down
                 this.animation.maxFrame = 7;
-                this.animation.frameY = 2;
+                this.animation.frameY = 0;
                 break;
             case 3: // Move left
                 this.animation.maxFrame = 7;
-                this.animation.frameY = 0;
+                this.animation.frameY = 2;
                 break;
             case 4: // Move right
                 this.animation.maxFrame = 7;
@@ -102,7 +102,7 @@ class Enemy extends Entity{
         }else{
             if(this.animationState !== 'moving'){
             this.animationState = 'moving';
-            this.animation = new SpriteAnimation(1024,1024,0,1,7,'playerImage',30,this.x,this.y,this.width,this.heigt);
+            this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.x,this.y,this.width,this.heigt);
             }
         }
         this.animation.updateSprite(deltaTime);
