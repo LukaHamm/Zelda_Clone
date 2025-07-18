@@ -5,23 +5,23 @@ class Player extends Entity{
     constructor(gameWidth, gameHeight){
         const hitboxFront = {
             x: 50,
-            y: gameHeight-200,
+            y: gameHeight-125,
             width:100,
-            height: 200,
+            height: 100,
             update(x,y){
                 this.x=x+50;
-                this.y=y;
+                this.y=y+75;
             }
         }
 
         const hitboxBack = {
             x: 50,
-            y: gameHeight-200,
+            y: gameHeight-125,
             width:100,
-            height: 200,
+            height: 100,
             update(x,y){
                 this.x=x+50;
-                this.y=y;
+                this.y=y +75;
             }
         }
         

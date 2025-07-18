@@ -19,7 +19,7 @@ body{
     background: black;
 }
 
-#playerImage, #playerIdle, #enemyImage, #background, #tree, #grass, #path, #playerAttack, #enemyWalk {
+#playerImage, #playerIdle, #enemyImage, #background, #tree, #grass, #path, #playerAttack, #enemyWalk, #enemyIdle {
     display: none;
 }
 

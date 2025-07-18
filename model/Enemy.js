@@ -7,12 +7,12 @@ class Enemy extends Entity{
             widthOrigin: width,
             heightOrigin: height,
             x: x +width/3,
-            y: y +height/3,
+            y: y + height/5,
             width:width/3,
-            height: height/2,
+            height: height/3,
             update(x,y){
                 this.x=x +this.widthOrigin/3;
-                this.y=y +this.heightOrigin/3;
+                this.y=y +this.heightOrigin/5;
             }
         }
 
@@ -20,12 +20,12 @@ class Enemy extends Entity{
             widthOrigin: width,
             heightOrigin: height,
             x: x +width/3,
-            y: y +height/3,
+            y: y + height/1.5,
             width:width/3,
-            height: height/2,
+            height: height/3,
             update(x,y){
                 this.x=x +this.widthOrigin/3;
-                this.y=y +this.heightOrigin/3;
+                this.y=y + this.heightOrigin/1.5;
             }
         }
         super(x,y,height,width, hitboxFront,hitboxBack,id);
@@ -36,11 +36,11 @@ class Enemy extends Entity{
         this.angleSpeed = Math.random() *0.2;
         this.curve = Math.random()*7;
         this.vy = 0;
-        this.image = document.getElementById("enemy");
+        //this.image = document.getElementById("enemy");
         this.health=5;
         this.maxHealth = 5;
         this.movementPattern = null;
-        this.animation = new SpriteAnimation(1024,1024,0,1,7,'playerImage',30,this.x,this.y,this.width,this.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyIdle',30,this.x,this.y,this.width,this.heigt)
         this.animationState = 'idle';
         this.hitPoints = 250;
     }
@@ -61,7 +61,7 @@ class Enemy extends Entity{
         this.animation.x = this.x+offsetx;
         this.animation.y = this.y+offsetY;
         this.animation.drawSprite(ctx);
-        ctx.strokeRect(this.hitboxBack.x+offsetx,this.hitboxBack.y+offsetY,this.hitboxBack.width,this.hitboxBack.height)
+        ctx.strokeRect(this.getHitBox().x+offsetx,this.getHitBox().y+offsetY,this.getHitBox().width,this.getHitBox().height)
         this.drawHealthBar(ctx,offsetx,offsetY);
         
     }
@@ -96,7 +96,7 @@ class Enemy extends Entity{
     }
         if(this.movementPattern.dy == 0 && this.movementPattern.dx == 0){
             if(this.animationState !== 'idle'){
-                this.animation = new SpriteAnimation(1024,1024,0,0,5,'playerIdle',30,this.x,this.y,this.width,this.heigt)
+                this.animation = new SpriteAnimation(1024,1024,0,0,5,'enemyIdle',30,this.x,this.y,this.width,this.heigt)
                 this.animationState = 'idle';
         }
         }else{
