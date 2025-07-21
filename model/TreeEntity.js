@@ -4,7 +4,7 @@ class TreeEntity extends Entity {
     constructor(x,y,width,height,id){
         const hitboxFront = {
             x: x +width/4,
-            y: y,
+            y: y + height/5,
             width:width/2,
             height: height/2
         }
