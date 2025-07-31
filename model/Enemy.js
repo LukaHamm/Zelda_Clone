@@ -40,7 +40,7 @@ class Enemy extends Entity{
         this.health=5;
         this.maxHealth = 5;
         this.movementPattern = null;
-        this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyIdle',30,this.x,this.y,this.width,this.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyIdle',30,this.x,this.y,this.width,this.height)
         this.animationState = 'idle';
         this.hitPoints = 250;
     }
@@ -55,13 +55,13 @@ class Enemy extends Entity{
         }
     }
 
-    draw(ctx,offsetx,offsetY){
-        //ctx.drawImage(this.image,0,0,1024,1024,this.x+offsetx,this.y+offsetY,this.width,this.heigt);
+    draw(ctx,offsetx,offsetY,player){
+        //ctx.drawImage(this.image,0,0,1024,1024,this.x+offsetx,this.y+offsetY,this.width,this.height);
         //ctx.strokeRect(this.hitboxBack.x+offsetx,this.hitboxBack.y+offsetY,this.hitboxBack.width,this.hitboxBack.height)
         this.animation.x = this.x+offsetx;
         this.animation.y = this.y+offsetY;
         this.animation.drawSprite(ctx);
-        ctx.strokeRect(this.getHitBox().x+offsetx,this.getHitBox().y+offsetY,this.getHitBox().width,this.getHitBox().height)
+        //ctx.strokeRect(this.getHitBox(player).x+offsetx,this.getHitBox(player).y+offsetY,this.getHitBox(player).width,this.getHitBox(player).height)
         this.drawHealthBar(ctx,offsetx,offsetY);
         
     }
@@ -96,13 +96,13 @@ class Enemy extends Entity{
     }
         if(this.movementPattern.dy == 0 && this.movementPattern.dx == 0){
             if(this.animationState !== 'idle'){
-                this.animation = new SpriteAnimation(1024,1024,0,0,5,'enemyIdle',30,this.x,this.y,this.width,this.heigt)
+                this.animation = new SpriteAnimation(1024,1024,0,0,5,'enemyIdle',30,this.x,this.y,this.width,this.height)
                 this.animationState = 'idle';
         }
         }else{
             if(this.animationState !== 'moving'){
             this.animationState = 'moving';
-            this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.x,this.y,this.width,this.heigt);
+            this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.x,this.y,this.width,this.height);
             }
         }
         this.animation.updateSprite(deltaTime);

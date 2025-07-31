@@ -95,7 +95,7 @@ class Player extends Entity{
     }
 
     updatePlayerHitBox(){
-        if(this.x +this.speed >= 0 && this.x + this.width +this.speed <= this.gameWidth && this.y + this.vy >= 0 && this.y + this.heigt + this.vy <= this.gameHeight){
+        if(this.x +this.speed >= 0 && this.x + this.width +this.speed <= this.gameWidth && this.y + this.vy >= 0 && this.y + this.height + this.vy <= this.gameHeight){
             
         }
         this.updateHitbox(this.x,this.y);
@@ -107,6 +107,11 @@ class Player extends Entity{
 
     moveHitBox(dy){
         this.currentAttackBox.y +=dy;
+    }
+
+    getHitBox(){
+        return this.hitboxBack;
+        
     }
 
     

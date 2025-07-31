@@ -17,7 +17,7 @@ class Chunk {
         let entityarrayCopy = []
         chunk.entityArray.forEach(entity => {
             if(entity instanceof TreeEntity){
-            let tree = EntityGenerator.generateEntity("101",entity.x,entity.y,entity.width,entity.heigt)
+            let tree = EntityGenerator.generateEntity("101",entity.x,entity.y,entity.width,entity.height)
             entityarrayCopy.push(tree)
             }
         })

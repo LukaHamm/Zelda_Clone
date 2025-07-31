@@ -67,12 +67,13 @@ window.addEventListener('load', function () {
             background.update(input)
             background.draw(ctx, input)
             rootChunk.updateEntityHitbox();
+            layer.renderOrder(chunks, player, rootChunk)
             chunks.forEach(chunkCopy => {
                 chunkCopy.entityArray.forEach(enity => {
                     //TODO aufpassen dass default wert nicht überschrieben wird, updaten der hitbox location
                     if (!player.isHit) {
                         if (enity.inFrame) {
-                            player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(), player)
+                            player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(player), player)
                             if (enity instanceof Enemy) {
                                 player.isHitByEnemy = (control.state instanceof Invisiblity) ? false : player.isHit;
                                 player.isHit=false;
@@ -98,14 +99,13 @@ window.addEventListener('load', function () {
             control.prepareAction(player);
             control.changeState(player, timeStamp)
             //control.state.animation.drawSprite(ctx);
-            layer.renderOrder(chunks, player)
             ctx.strokeRect(player.hitboxBack.x, player.hitboxBack.y, player.hitboxBack.width, player.hitboxBack.height)
             ctx.strokeRect(player.attackboxRight.x, player.attackboxRight.y, player.attackboxRight.width, player.attackboxRight.height)
             ctx.strokeRect(player.attackboxLeft.x, player.attackboxLeft.y, player.attackboxLeft.width, player.attackboxLeft.height)
             ctx.strokeRect(player.attackboxFront.x, player.attackboxFront.y, player.attackboxFront.width, player.attackboxFront.height)
             ctx.strokeRect(player.attackboxBack.x, player.attackboxBack.y, player.attackboxBack.width, player.attackboxBack.height)
-            chunkRenderer.drawEntittiesDynamic(chunks, ctx, control);
-            const hitboxPlayer = player.getHitBox();
+            chunkRenderer.drawEntittiesDynamic(chunks, ctx, control, player);
+            const hitboxPlayer = player.getHitBox(player);
             if (rootChunk !== undefined) {
                 let newRootChunk = determineNextRootChunk(rootChunk, chunks);
                 if (newRootChunk != null) {
@@ -124,10 +124,10 @@ window.addEventListener('load', function () {
                 if (control.state instanceof Attack) {
                     chunks.forEach(chunkCopy => {
                         chunkCopy.entityArray.forEach(enity => {
-                            player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(), player)
+                            player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(player), player)
                             if (control.state instanceof Attack) {
                                 if (enity instanceof Enemy) {
-                                    enity.isHit = CollisionDetector.isAttackHit(chunkCopy, enity.getHitBox(), player.currentAttackBox, timeStamp);
+                                    enity.isHit = CollisionDetector.isAttackHit(chunkCopy, enity.getHitBox(player), player.currentAttackBox, timeStamp);
                                     if (enity.isHit) {
                                         enity.decrementHealth();
                                         if(control.state.animation.frameY == 1){

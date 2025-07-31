@@ -33,7 +33,7 @@ class Idle extends State {
     static maxFrame = 5; // Maximum frames for the idle animation
     constructor(player){
         super();
-        this.animation = new SpriteAnimation(1024,1024,0,0,Idle.maxFrame,'playerIdle',30,player.x,player.y,player.width,player.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,0,Idle.maxFrame,'playerIdle',30,player.x,player.y,player.width,player.height)
     }
 
     playerAction(player,input, deltaTime){
@@ -46,7 +46,7 @@ class Walk extends State{
     static maxFrame = 7; // Maximum frames for the walk animation
     constructor(player){
         super();
-        this.animation = new SpriteAnimation(1024,1024,0,1,Walk.maxFrame,'playerImage',30,player.x,player.y,player.width,player.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,1,Walk.maxFrame,'playerImage',30,player.x,player.y,player.width,player.height)
     }
 
     prepareAction(player,input){
@@ -90,9 +90,9 @@ class Walk extends State{
         //vertical movement
         player.y += player.vy;
         this.animation.y += player.vy
-        if(player.y > player.gameHeight -player.heigt){
-            player.y = player.gameHeight -player.heigt;
-             this.animation.y = player.gameHeight -player.heigt
+        if(player.y > player.gameHeight -player.height){
+            player.y = player.gameHeight -player.height;
+             this.animation.y = player.gameHeight -player.height
         }
         if(player.y < 0){
             player.y=0;
@@ -109,7 +109,7 @@ class Attack extends State {
 
     constructor(player){
         super();
-        this.animation = new SpriteAnimation(1024,1024,0,1,Attack.maxFrame,'playerAttack',60,player.x,player.y,player.width,player.heigt)
+        this.animation = new SpriteAnimation(1024,1024,0,1,Attack.maxFrame,'playerAttack',60,player.x,player.y,player.width,player.height)
     }
 
 

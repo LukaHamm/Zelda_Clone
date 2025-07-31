@@ -1,5 +1,5 @@
 class SpriteAnimation {
-    constructor(spriteWidth,spriteHeight, frameX,frameY,maxFrame,imageId,fps, x,y,width,heigt){
+    constructor(spriteWidth,spriteHeight, frameX,frameY,maxFrame,imageId,fps, x,y,width,height){
         this.spriteWidth = spriteWidth;
         this.spriteHeight = spriteHeight;
         this.frameX = frameX;
@@ -11,7 +11,7 @@ class SpriteAnimation {
         this.x=x;
         this.y=y;
         this.width=width;
-        this.heigt=heigt;
+        this.height=height;
         this.frameTimer=0;
     }
 
@@ -29,7 +29,7 @@ class SpriteAnimation {
 
     drawSprite(context){
         context.drawImage(this.image,this.frameX*this.spriteWidth,this.frameY*this.spriteHeight,this.spriteWidth,
-            this.spriteHeight,this.x,this.y,this.width,this.heigt);
+            this.spriteHeight,this.x,this.y,this.width,this.height);
     }
 }
 

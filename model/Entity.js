@@ -3,11 +3,11 @@ class Entity {
 
 
     
-    constructor(x,y, heigt,width,hitboxFront, hitboxBack, id){
+    constructor(x,y, height,width,hitboxFront, hitboxBack, id){
         this.x=x;
         this.y=y;
         this.width = width;
-        this.heigt = heigt;
+        this.height = height;
         this.hitboxFront=hitboxFront;
         this.hitboxBack=hitboxBack
         this.layer;
@@ -32,8 +32,8 @@ class Entity {
 
 
 
-    getHitBox(){
-        if(this.layer == 2){
+    getHitBox(player){
+        if(this.layer< player.layer){
             return this.hitboxBack;
         }else{
             return this.hitboxFront;
