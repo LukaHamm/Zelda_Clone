@@ -1,8 +1,7 @@
-class MovementPattern {
-    constructor(entity, movementRadius, movementSpeed) {
-        this.entity = entity;
-        this.movementRadius = movementRadius;
-        this.movementSpeed = movementSpeed
+import { MovementPattern } from "./MovementPattern.js";
+class WalkingPattern extends MovementPattern {
+    constructor(entity, movementRadius, movementSpeed){
+        super(entity,movementRadius,movementSpeed)
         this.initialX = entity.x;
         this.initialY = entity.y;
         this.maxX = this.initialX + movementRadius;
@@ -17,6 +16,7 @@ class MovementPattern {
         this.dy = 0;
         this.dx = 0;
     }
+
 
     update(timestamp) {
         this.prepareMovement(timestamp);
@@ -51,7 +51,6 @@ class MovementPattern {
             this.entity.updateHitbox(this.entity.x, this.entity.y);
 
         }
-        this.entity.updateSprite(timestamp - this.lastTimestampUpdate)
     }
 
 
@@ -64,19 +63,6 @@ class MovementPattern {
         this.lastTimestampChangeDirection = timestamp;
     }
 
-
-
-    cancelMovement() {
-        // This method should be overridden by subclasses to implement specific movement patterns
-    }
-
-    setEntity(entity){
-        this.entity=entity;
-    }
-
-
-
-
 }
 
-export { MovementPattern }
+export {WalkingPattern}

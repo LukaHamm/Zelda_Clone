@@ -1,9 +1,11 @@
 import { Entity } from "./Entity.js";
 import { SpriteAnimation } from "../animation/SpriteAnimation.js";
-import { EnemyStateMachine } from "../controls/EnemyStateMachine.js";
-class Enemy extends Entity{
+import { Enemy } from "./Enemy.js";
+import { WalkingState } from "../controls/WalkingState.js";
+import { IdleState } from "../controls/IdleState.js";
+class MushroomEnemy extends Enemy{
     static healthBarHeight = 20;
-    constructor(x,y,width,height,id, stateMachine){
+    constructor(x,y,width,height,id, statemachine){
         const hitboxFront = {
             widthOrigin: width,
             heightOrigin: height,
@@ -29,15 +31,10 @@ class Enemy extends Entity{
                 this.y=y + this.heightOrigin/1.5;
             }
         }
-        super(x,y,height,width, hitboxFront,hitboxBack,id);
+        super(x,y,height,width,id,statemachine);
         /*this.gameWidth=gameWidth;
         this.gameHeight=gameHeight;*/
-        this.stateMachine=stateMachine;
         this.speed = 5;
-        this.angle = Math.random()*2;
-        this.angleSpeed = Math.random() *0.2;
-        this.curve = Math.random()*7;
-        this.vy = 0;
         //this.image = document.getElementById("enemy");
         this.health=5;
         this.maxHealth = 5;
@@ -76,39 +73,17 @@ class Enemy extends Entity{
     }
 
     updateSprite(deltaTime){
-        let direction = this.movementPattern.direction;
-        if(this.animationState === 'moving'){
-         switch (direction) {
-            case 1: // Move up
-                this.animation.maxFrame = 7;
-                this.animation.frameY = 3;
-                break;
-            case 2: // Move down
-                this.animation.maxFrame = 7;
-                this.animation.frameY = 0;
-                break;
-            case 3: // Move left
-                this.animation.maxFrame = 7;
-                this.animation.frameY = 2;
-                break;
-            case 4: // Move right
-                this.animation.maxFrame = 7;
-                this.animation.frameY= 1;
-                break;
-        }
+        this.stateMachine.enemyAction(deltaTime);
     }
-        if(this.movementPattern.dy == 0 && this.movementPattern.dx == 0){
-            if(this.animationState !== 'idle'){
-                this.animation = new SpriteAnimation(1024,1024,0,0,5,'enemyIdle',30,this.x,this.y,this.width,this.height)
-                this.animationState = 'idle';
+
+
+    changeState(chunk){
+        if(this.stateMachine.state instanceof WalkingState){
+            this.stateMachine.setNextState(this.movementPattern);
+        }else if (this.stateMachine.state instanceof IdleState){
+            this.stateMachine.setNextState(this.movementPattern);
         }
-        }else{
-            if(this.animationState !== 'moving'){
-            this.animationState = 'moving';
-            this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.x,this.y,this.width,this.height);
-            }
-        }
-        this.animation.updateSprite(deltaTime);
+
     }
 
     drawHealthBar(ctx,offsetx, offsetY){
@@ -125,24 +100,6 @@ class Enemy extends Entity{
         }
     }
 
-    move(){
-        //move right
-
-        //move left
-
-        //move up
-
-        //move down
-
-        //maxMovementRadius
-        this.x -=this.speed;
-        //this.y += Math.random()*5-2.5;
-        this.y += this.curve*Math.sin(this.angle);
-        this.updateHitbox(this.x,this.y);
-        this.angle += this.angleSpeed;
-        if(this.x + this.width < 0) this.x = 400;
-    }
-
     setMovementPattern(movementPattern){
         this.movementPattern = movementPattern;
     }
@@ -151,5 +108,4 @@ class Enemy extends Entity{
     }
 
 }
-
-export {Enemy}
+export {MushroomEnemy}
