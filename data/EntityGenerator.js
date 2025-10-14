@@ -7,6 +7,7 @@ import { IdleTrigger } from "../controls/IdleTrigger.js";
 import { WalkingTrigger } from "../controls/WalkTrigger.js";
 import { MushroomEnemy } from "../model/MushroomEnemy.js";
 import { EnemyStateMachine } from "../controls/EnemyStateMachine.js";
+import { IdlePattern } from "../controls/IdlePattern.js";
 class EntityGenerator{
 
  
@@ -18,14 +19,17 @@ class EntityGenerator{
             case "102":
                 let enemy = new MushroomEnemy(x,y,width/2,height/2,entityUniqueId);
                 let walkPattern = new WalkingPattern(enemy,  100, 5);
+                let idlePattern = new IdlePattern(enemy,100,5);
                 
-                let initialState = new EnemyStateBuilder().setMovementPattern(walkPattern).setNextState(null).setStateType("idle").setTrigger(new WalkingTrigger(['dx','dy'], [0,0]))
-                let secondaryState = new EnemyStateBuilder().setMovementPattern(walkPattern).setNextState(initialState).setStateType("idle").setTrigger(new IdleTrigger(['dx','dy'], [0,0]))
+                let initialState = new EnemyStateBuilder().setMovementPattern(idlePattern).setNextState(null).setStateType("idle").setTrigger(new WalkingTrigger(['dx','dy','bool'], [0,0,0])).setEnemy(enemy).build()
+                let secondaryState = new EnemyStateBuilder().setMovementPattern(walkPattern).setNextState(initialState).setStateType("walking").setTrigger(new IdleTrigger(['dx','dy'], [0,0])).setEnemy(enemy).build()
                 initialState.setNextState(secondaryState);
+                secondaryState.setNextState(initialState);
                 let stateMachine = new EnemyStateMachine(initialState);
                 enemy.stateMachine=stateMachine;
+                /*let enemy = new Enemy(x,y,width,height,entityUniqueId);
                 let pattern = new MovementPattern(enemy, 100, 5);
-                enemy.setMovementPattern(pattern);
+                enemy.setMovementPattern(pattern);*/
                 return enemy
             default:
                 return null;

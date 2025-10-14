@@ -8,15 +8,17 @@ class IdleTrigger extends Trigger{
 
     evaluateTrigger(triggerContextMap){
        let triggerConditionsSatisfied = true;
-        this.triggerConditionMap.array.forEach((key, value) => {
+        this.triggerConditionMap.forEach((value, key) => {
             switch(key){
                 case 'dx':
-                    triggerContextMap.get('dx') != value;
-                    triggerConditionsSatisfied = false;
+                    if(triggerContextMap.get('dx') != value){
+                        triggerConditionsSatisfied = false;
+                    }
                     break;
                 case 'dy':
-                    triggerContextMap.get('dy') != value;
+                    if(triggerContextMap.get('dy') != value){
                     triggerConditionsSatisfied = false;
+                    }
                     break;
             }
         });

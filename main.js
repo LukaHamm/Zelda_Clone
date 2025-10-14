@@ -9,6 +9,8 @@ import { ChunkRenderer } from "./renderer/ChunkRenderer.js";
 import { Layer } from "./renderer/Layer.js";
 import { CollisionDetector } from "./data/CollisionDetector.js";
 import { Enemy } from "./model/Enemy.js";
+import { WalkingState } from "./controls/WalkingState.js";
+import { IdleState } from "./controls/IdleState.js";
 
 
 window.addEventListener('load', function () {
@@ -27,6 +29,11 @@ window.addEventListener('load', function () {
     const chunkLoader = new ChunkLoader();
     const chunkRenderer = new ChunkRenderer();
     const layer = new Layer();
+    let enemyXOld = 0;
+    let enemyYOld = 0;
+    let triggerUpdateDelay=2000;
+    let lastTimeWalkTriggered=0;
+
 
     function determineNextRootChunk(rootChunk, chunks) {
         const chunkRow = parseInt(rootChunk.chunkid.substring(0, 5));
@@ -77,8 +84,43 @@ window.addEventListener('load', function () {
                             if (enity instanceof Enemy) {
                                 player.isHitByEnemy = (control.state instanceof Invisiblity) ? false : player.isHit;
                                 player.isHit=false;
-                                enity.getMovementPattern().update(timeStamp);
+                                
+                                let dx = enity.x - enemyXOld;
+                                let dy = enity.y -enemyYOld;
+
+                                /*if(timeStamp - lastTimeWalkTriggered > triggerUpdateDelay){
+                                    dx = Math.round(Math.random());;
+                                    dy = Math.round(Math.random());;
+                                    lastTimeWalkTriggered = timeStamp;
+                                }*/
+                                //let dx = 0;
+                                //let dy = 0;
+                                enemyXOld = enity.x;
+                                enemyYOld = enity.y;
+                                const triggerContextMap = new Map([
+                                            ['dx', dx],
+                                            ['dy', dy]
+                                            ]);
+                                let oldstate = enity.stateMachine.state;
+                                if(timeStamp - lastTimeWalkTriggered > triggerUpdateDelay){
+                                    dx = 1;
+                                    dy = 0;
+                                    if(enity.stateMachine.state instanceof IdleState){
+                                        triggerContextMap.set('dx',dx);
+                                        triggerContextMap.set('dy',dy);
+                                        triggerContextMap.set('bool', enity.stateMachine.state.movementPattern.leaveIdle)
+                                    }
+                                    lastTimeWalkTriggered = timeStamp;
+                                    enity.stateMachine.changeState(triggerContextMap)
+                                }
+                                //TODO Es wird zu oft upgedatet!
+                                if(oldstate != enity.stateMachine.state){
+                                   enity.stateMachine.state.entry() 
+                                }
+                                enity.stateMachine.enmeyAction(timeStamp,ctx)
+                                //enity.getMovementPattern().update(timeStamp);
                             }
+                            
 
 
                         }

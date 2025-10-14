@@ -30,7 +30,7 @@ class EnemyState {
     }
 
     setNextState(state){
-        this.state=state;
+        this.nextState=state;
     }
 
 }

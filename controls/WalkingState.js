@@ -1,21 +1,25 @@
 import { EnemyState } from "./EnemyState.js";
+import { SpriteAnimation } from "../animation/SpriteAnimation.js";
 class WalkingState extends EnemyState{
     constructor(enemy, movementPattern, nextState, trigger){
         super(enemy, movementPattern, nextState, trigger);
         this.movementPattern=movementPattern;
+         this.updateDelay = 1000 / 30;
+         this.lastTime = 0;
+         this.animation=new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.enemy.x,this.enemy.y,this.enemy.width,this.enemy.height);
     }
 
     entry(){
-        this.movementPattern.setEnemy(enemy);
-        this.enemy.animation =  new SpriteAnimation(1024,1024,0,1,7,'enemyWalk',30,this.x,this.y,this.width,this.height);
+        this.movementPattern.setEntity(this.enemy);
+        this.enemy.animation =  this.animation;
     }
 
     prepareAction(){
         
     }
 
-    enmeyAction(deltaTime){
-        this.movementPattern.walkAction();
+    enmeyAction(timestamp){
+        this.movementPattern.update(timestamp);
         let direction = this.movementPattern.direction;
          switch (direction) {
             case 1: // Move up
@@ -35,7 +39,7 @@ class WalkingState extends EnemyState{
                 this.enemy.animation.frameY= 1;
                 break;
         }
-        this.animation.updateSprite(deltaTime);
+        this.enemy.animation.updateSprite(timestamp-this.movementPattern.lastTimestampUpdate);
 }
 
     

@@ -1,6 +1,6 @@
 import { WalkingState } from "../controls/WalkingState.js";
 //import { AttackState } from "../controls/AttackState.js";
-import { IdleState } from "../controls/IdleState";
+import { IdleState } from "../controls/IdleState.js";
 
 class EnemyStateBuilder {
         constructor(){
@@ -24,6 +24,12 @@ class EnemyStateBuilder {
 
     setTrigger(trigger){
         this.trigger=trigger;
+        return this;
+    }
+
+    setEnemy(enemy){
+        this.enemy=enemy;
+        return this;
     }
 
     build(){
@@ -34,7 +40,7 @@ class EnemyStateBuilder {
                 //return new AttackState(this.enemy, this.pattern, this.nextState, this.trigger);
             // weitere States ...
             case "idle":
-                return new IdleState(this.enemy, this.nextState,this.trigger)
+                return new IdleState(this.enemy, this.movementPattern, this.nextState,this.trigger)
             default:
                 throw new Error("Unbekannter State-Typ: " + this.stateType);
     }

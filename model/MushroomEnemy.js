@@ -39,7 +39,7 @@ class MushroomEnemy extends Enemy{
         this.health=5;
         this.maxHealth = 5;
         this.movementPattern = null;
-        this.animation = new SpriteAnimation(1024,1024,0,1,7,'enemyIdle',30,this.x,this.y,this.width,this.height)
+        this.animation = new SpriteAnimation(1024,1024,0,0,5,'enemyIdle',30,this.x,this.y,this.width,this.height)
         this.animationState = 'idle';
         this.hitPoints = 250;
         this.direction=1;
@@ -60,9 +60,9 @@ class MushroomEnemy extends Enemy{
         //ctx.strokeRect(this.hitboxBack.x+offsetx,this.hitboxBack.y+offsetY,this.hitboxBack.width,this.hitboxBack.height)
         this.animation.x = this.x+offsetx;
         this.animation.y = this.y+offsetY;
-        this.animation.drawSprite(ctx);
         //ctx.strokeRect(this.getHitBox(player).x+offsetx,this.getHitBox(player).y+offsetY,this.getHitBox(player).width,this.getHitBox(player).height)
         this.drawHealthBar(ctx,offsetx,offsetY);
+        this.animation.drawSprite(ctx);
         
     }
 
@@ -72,8 +72,9 @@ class MushroomEnemy extends Enemy{
 
     }
 
-    updateSprite(deltaTime){
-        this.stateMachine.enemyAction(deltaTime);
+    updateSprite(deltaTime, ctx){
+        this.stateMachine.enmeyAction(deltaTime);
+       // this.animation.drawSprite(ctx)
     }
 
 

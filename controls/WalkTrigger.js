@@ -1,23 +1,31 @@
+import { Trigger } from "./Trigger.js";
+
 class WalkingTrigger extends Trigger{
 
-    static walkConditions = ['dx','dy','vx', 'vy']
+    static walkConditions = ['dx','dy','vx', 'vy', 'bool']
 
     constructor(triggerConditions, triggerConditionValues){
         super(triggerConditions, triggerConditionValues)
     }
 
     evaluateTrigger(triggerContextMap){
-        let triggerConditionsSatisfied = true;
-        this.triggerConditionMap.array.forEach((key, value) => {
+        let triggerConditionsSatisfied = false;
+
+        this.triggerConditionMap.forEach((value, key) => {
             switch(key){
                 case 'dx':
-                    triggerContextMap.get('dx') <= value;
-                    triggerConditionsSatisfied = false;
+                    if(Math.abs(triggerContextMap.get('dx')) > value){
+                        triggerConditionsSatisfied = true;
+                    }
                     break;
                 case 'dy':
-                   triggerContextMap.get('dy') <= value;
-                    triggerConditionsSatisfied = false;
-                    break;
+                   if(Math.abs(triggerContextMap.get('dy')) > value){
+                    triggerConditionsSatisfied = true;
+                   }
+                   break;
+                case 'bool':
+                triggerConditionsSatisfied = triggerContextMap.get('bool');
+                   break;
             }
         });
         return triggerConditionsSatisfied;

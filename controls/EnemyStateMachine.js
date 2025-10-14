@@ -8,8 +8,8 @@ class EnemyStateMachine{
             
     }
 
-    enmeyAction(deltaTime){
-        this.state.enmeyAction(deltaTime)
+    enmeyAction(timeStamp){
+        this.state.enmeyAction(timeStamp)
     }
 
     cancelAction(){
@@ -18,6 +18,7 @@ class EnemyStateMachine{
 
     changeState(triggerContext){
         this.state = this.state.changeState(triggerContext);
+        return this.state;
     }
 }
 
