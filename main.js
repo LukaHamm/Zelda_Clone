@@ -11,6 +11,7 @@ import { CollisionDetector } from "./data/CollisionDetector.js";
 import { Enemy } from "./model/Enemy.js";
 import { WalkingState } from "./controls/WalkingState.js";
 import { IdleState } from "./controls/IdleState.js";
+import { EnemyManager } from "./controls/EnemyManager.js";
 
 
 window.addEventListener('load', function () {
@@ -29,6 +30,7 @@ window.addEventListener('load', function () {
     const chunkLoader = new ChunkLoader();
     const chunkRenderer = new ChunkRenderer();
     const layer = new Layer();
+    const enemyManager = new EnemyManager();
     let enemyXOld = 0;
     let enemyYOld = 0;
     let triggerUpdateDelay=2000;
@@ -75,13 +77,35 @@ window.addEventListener('load', function () {
             background.draw(ctx, input)
             rootChunk.updateEntityHitbox();
             layer.renderOrder(chunks, player, rootChunk)
+
+            chunks.forEach(chunkCopy => {
+                chunkCopy.entityArray.forEach(entity => {
+                    if(entity instanceof Enemy){
+                        enemyManager.add(entity);
+                    }
+                })
+            })
+            enemyManager.entities.forEach(enemy => {
+                let hasEnemy = false;
+                chunks.forEach(chunkCopy => {
+                    chunkCopy.entityArray.forEach(entity => {
+                        if(enemy.id === entity.id){
+                            hasEnemy=true;
+                        }
+                    })
+                })
+                if(!hasEnemy){
+                    enemyManager.remove(enemy);
+                }
+            })
+            
             chunks.forEach(chunkCopy => {
                 chunkCopy.entityArray.forEach(enity => {
                     //TODO aufpassen dass default wert nicht überschrieben wird, updaten der hitbox location
                     if (!player.isHit) {
                         if (enity.inFrame) {
                             player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(player), player)
-                            if (enity instanceof Enemy) {
+                            /*if (enity instanceof Enemy) {
                                 player.isHitByEnemy = (control.state instanceof Invisiblity) ? false : player.isHit;
                                 player.isHit=false;
                                 
@@ -92,7 +116,7 @@ window.addEventListener('load', function () {
                                     dx = Math.round(Math.random());;
                                     dy = Math.round(Math.random());;
                                     lastTimeWalkTriggered = timeStamp;
-                                }*/
+                                }
                                 //let dx = 0;
                                 //let dy = 0;
                                 enemyXOld = enity.x;
@@ -119,7 +143,7 @@ window.addEventListener('load', function () {
                                 }
                                 enity.stateMachine.enmeyAction(timeStamp,ctx)
                                 //enity.getMovementPattern().update(timeStamp);
-                            }
+                            }*/
                             
 
 
@@ -128,6 +152,10 @@ window.addEventListener('load', function () {
 
                 })
             })
+            enemyManager.changeEnemyStates(chunks,rootChunk,timeStamp);
+            enemyManager.entryState();
+            enemyManager.enemyAction(timeStamp);
+            enemyManager.saveEnemyStates()
             if (!player.isHit) {
                 chunks.forEach(chunkCopy => {
                     if (control.state instanceof Walk) {

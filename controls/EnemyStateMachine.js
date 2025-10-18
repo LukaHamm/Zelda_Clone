@@ -8,6 +8,10 @@ class EnemyStateMachine{
             
     }
 
+    entry(){
+        this.state.entry();
+    }
+
     enmeyAction(timeStamp){
         this.state.enmeyAction(timeStamp)
     }

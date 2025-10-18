@@ -4,7 +4,9 @@ class EntityManager {
     }
 
     add(entity) {
+        if(!this.entities.includes(entity)){
         this.entities.push(entity);
+        }
     }
 
     remove(entity) {

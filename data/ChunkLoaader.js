@@ -68,7 +68,7 @@ class ChunkLoader {
             this.tiles[(Math.ceil(i / 2) - i % 2)][j] = new Tile(x, y, tileData.background, tileLength);
           } else {
             if (columns[j] !== "0") {
-              const entity = EntityGenerator.generateEntity(columns[j], x, y, 4 * tileLength, 4 * tileLength, entityUniqueId);
+              const entity = EntityGenerator.generateEntity(columns[j], x, y, 4 * tileLength, 4 * tileLength, chunkid + entityUniqueId);
               this.entities.push(entity);
               entityUniqueId++;
             }
