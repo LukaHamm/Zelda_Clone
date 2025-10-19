@@ -105,7 +105,7 @@ window.addEventListener('load', function () {
                     if (!player.isHit) {
                         if (enity.inFrame) {
                             player.isHit = CollisionDetector.isCollision(chunkCopy, enity.getHitBox(player), player)
-                            /*if (enity instanceof Enemy) {
+                            if (enity instanceof Enemy && !player.isHitByEnemy) {
                                 player.isHitByEnemy = (control.state instanceof Invisiblity) ? false : player.isHit;
                                 player.isHit=false;
                                 
@@ -142,8 +142,8 @@ window.addEventListener('load', function () {
                                    enity.stateMachine.state.entry() 
                                 }
                                 enity.stateMachine.enmeyAction(timeStamp,ctx)
-                                //enity.getMovementPattern().update(timeStamp);
-                            }*/
+                                //enity.getMovementPattern().update(timeStamp);*/
+                            }
                             
 
 
