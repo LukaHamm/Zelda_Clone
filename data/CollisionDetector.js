@@ -25,6 +25,13 @@ class CollisionDetector {
             (hitboxEntity.y + chunk.offsetY + hitboxEntity.height) >= (hitboxAttack.y));
     }
 
+    static isCollisionEntity(chunk, hitboxA, hitboxB){
+        return ((hitboxA.x + chunk.offsetx) <= (hitboxB.x + hitboxB.width + chunk.offsetx) &&
+            (hitboxA.x + chunk.offsetx + hitboxA.width) >= (hitboxB.x + chunk.offsetx) &&
+            (hitboxA.y+ chunk.offsetY) <= (hitboxB.y + hitboxB.height + chunk.offsetY) &&
+            (hitboxA.y + chunk.offsetY + hitboxA.height) >= (hitboxB.y + chunk.offsetY));
+    }
+
 }
 
 export{CollisionDetector}

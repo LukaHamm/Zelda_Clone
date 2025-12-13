@@ -40,8 +40,10 @@ class WalkingState extends EnemyState{
                 break;
         }
         this.enemy.animation.updateSprite(timestamp-this.movementPattern.lastTimestampUpdate);
-}
+    }
 
-    
+    rollback(){
+        this.movementPattern.rollbackMovement()
+    } 
 }
 export {WalkingState}

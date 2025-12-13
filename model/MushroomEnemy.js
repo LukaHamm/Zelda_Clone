@@ -77,6 +77,15 @@ class MushroomEnemy extends Enemy{
        // this.animation.drawSprite(ctx)
     }
 
+    knockback(dx,dy){
+        this.x += dx;
+        this.y += dy;
+        this.hitboxBack.x += dx;
+        this.hitboxBack.y += dy;
+        this.hitboxFront.x += dx;
+        this.hitboxFront.y += dy;
+    }
+
 
     changeState(chunk){
         if(this.stateMachine.state instanceof WalkingState){

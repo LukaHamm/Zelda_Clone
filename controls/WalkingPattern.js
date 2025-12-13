@@ -59,8 +59,54 @@ class WalkingPattern extends MovementPattern {
         if (deltaTime < this.movementChangeDelay) {
             return;
         }
-        this.direction = Math.floor(Math.random() * 4) + 1;
+        this.direction = this.getDirection();
         this.lastTimestampChangeDirection = timestamp;
+    }
+
+
+    getDirection(){
+        let validDirectionArray = []
+        if (this.entity.y - this.movementSpeed > this.minY) {
+            validDirectionArray.push(1);
+        }
+        if (this.entity.y + this.movementSpeed < this.maxY) {
+            validDirectionArray.push(2);
+        }
+        if (this.entity.x + this.movementSpeed > this.minX) {
+            validDirectionArray.push(3);
+        }
+        if (this.entity.x + this.movementSpeed < this.maxX) {
+            validDirectionArray.push(4);
+        }
+        let arrLength = validDirectionArray.length;
+        let directionIndex = Math.floor(Math.random() * arrLength);
+        return validDirectionArray[directionIndex];
+            
+    }
+
+    rollbackMovement(){
+        switch(this.direction){
+            case 1: // Move up
+                    if (this.entity.y - this.movementSpeed > this.minY) {
+                        this.entity.y = this.entity.y + this.movementSpeed;
+                    }
+                    break;
+                case 2: // Move down
+                    if (this.entity.y + this.movementSpeed < this.maxY) {
+                        this.entity.y = this.entity.y - this.movementSpeed;
+                    }
+                    break;
+                case 3: // Move left
+                    if (this.entity.x + this.movementSpeed > this.minX) {
+                        this.entity.x =  this.entity.x + this.movementSpeed;
+                    }
+                    break;
+                case 4: // Move right
+                    if (this.entity.x + this.movementSpeed < this.maxX) {
+                        this.entity.x = this.entity.x - this.movementSpeed;
+                    }
+                    break;
+        }
     }
 
 }

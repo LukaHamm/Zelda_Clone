@@ -3,6 +3,7 @@ import { IdleState } from "./IdleState.js"
 import { WalkingState } from "./WalkingState.js"
 import { MushroomEnemy } from "../model/MushroomEnemy.js";
 import { EnemyStateMachine } from "./EnemyStateMachine.js";
+import { CollisionDetector } from "../data/CollisionDetector.js";
 import { State } from "./State.js";
 class EnemyManager extends EntityManager {
     
@@ -48,6 +49,15 @@ class EnemyManager extends EntityManager {
         }
     }
 
+    manage(chunks,rootChunk,timeStamp, player){
+        this.changeEnemyStates(chunks,rootChunk,timeStamp);
+        this.entryState();
+        this.enemyAction(timeStamp);
+        this.detectCollision(player,rootChunk,chunks);
+        this.cancelMovement();
+        this.saveEnemyStates()    
+    }
+
     //hier den Zeitschaltung einbauen oder im State selber fest reinkodieren, wann State geupdatet wird?
     changeEnemyStates(chunks, rootChunk, timestamp){
         if((timestamp-this.lastTime) > this.updateIntervall){
@@ -67,6 +77,39 @@ class EnemyManager extends EntityManager {
     }
     }
 
+    detectCollision(player, rootChunk, chunks){
+        let currentChunk;
+        this.entities.forEach(entity=>{
+            entity.isHit= false;
+            chunks.forEach(chunk => {
+                if(chunk.entityArray.some(chunkEntity => chunkEntity.id===entity.id)){
+                    currentChunk= chunk;
+                }
+            })
+            if(CollisionDetector.isCollision(currentChunk,entity.getHitBox(player),player)){
+                entity.isHit = true;   
+            }
+            currentChunk.entityArray.forEach(chunkEntity => {
+                if(!(chunkEntity instanceof MushroomEnemy)){
+                if(CollisionDetector.isCollisionEntity(rootChunk, entity.getHitBox(player), chunkEntity.getHitBox(entity))){
+                    entity.isHit=true;
+                }
+            }
+            })
+        })
+    }
+
+    cancelMovement(){
+        this.entities.forEach(entity => {
+            if(entity.stateMachine.state instanceof WalkingState /*auch füer attackstate*/){
+                //rollback update
+                if(entity.isHit){
+                    entity.stateMachine.rollbackState()
+                }
+
+            }
+        })
+    }
 
     entryState(){
          this.entities.forEach(entity => {
@@ -123,6 +166,24 @@ class EnemyManager extends EntityManager {
                         triggerContextMap.set('dy', entity.y - entitystateBefore.y)
                     }
                     break;
+                case 'minxPosition':
+                case 'minyPosition':
+                case 'maxxPosition':
+                case 'maxyPosition':
+                    if(entitystateBefore != null){
+                    let dx = entity.x-entitystateBefore.x;
+                    let dy = entity.y-entitystateBefore.y;
+                    if (dx == 0){
+                        dy > 0? triggerContextMap.set('maxyPosition', entity.y+entity.stateMachine.state.movementPattern.movementSpeed):triggerContextMap.set('minyPosition', entity.y-entity.stateMachine.state.movementPattern.movementSpeed)
+                    }
+                    //nicht mit dy dx sondern mit schritt bei movement pattern
+                     if (dy == 0){
+                        dx > 0? triggerContextMap.set('maxxPosition', entity.x+entity.stateMachine.state.movementPattern.movementSpeed):triggerContextMap.set('minxPosition', entity.x-entity.stateMachine.state.movementPattern.movementSpeed)
+                    }
+                    }
+                    break;
+                
+
             }
         });
         return triggerContextMap;

@@ -56,6 +56,10 @@ class State {
         }
     }
 
+    rollback(){
+        
+    }
+
 }
 
 export {State}
